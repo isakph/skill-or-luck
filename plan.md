@@ -13,7 +13,7 @@ This project also serves as a learning exercise in Next.js, TypeScript, and Reac
 ## The model
 
 Each simulated contest has N contestants. Each contestant has three scores drawn uniformly from [0, 100]:
-- **Ability** (talent)
+- **Ability**
 - **Effort**
 - **Luck**
 
@@ -35,7 +35,10 @@ Key outputs per simulation batch (M contests with the same parameters):
 
 ### Why the results are striking
 
-Among N contestants, many will be clustered near the top of the skill distribution. Because `(ability + effort) / 2` averages two uniform draws, it follows a **triangular distribution** (peaked at 50, less variance than a single uniform draw), making the top contestants even more tightly bunched. Luck then acts as a tiebreaker among near-equals. The larger N is, the more contestants are packed near the ceiling, and the more decisive luck becomes — even at very small weights.
+Among N contestants, many will be clustered near the top of the skill distribution.
+Because `(ability + effort) / 2` averages two uniform draws, it follows a **triangular distribution** (peaked at 50, less variance than a single uniform draw), making the top contestants even more tightly bunched.
+Luck then acts as a tiebreaker among near-equals.
+The larger N is, the more contestants are packed near the ceiling, and the more decisive luck becomes — even at very small weights.
 
 ## Parameters and their ranges
 
