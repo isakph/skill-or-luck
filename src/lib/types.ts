@@ -1,0 +1,25 @@
+export interface SimulationParams {
+  n: number;          // contestants per contest (100–100,000)
+  m: number;          // contests in a batch (100–10,000)
+  luckWeight: number; // fraction of performance from luck (0.01–0.20)
+}
+
+export interface ContestWinner {
+  ability: number;
+  effort: number;
+  luck: number;
+  skillScore: number;       // (ability + effort) / 2
+  performance: number;
+  wasHighestSkill: boolean; // true if this contestant had the highest skillScore
+  skillGap: number;         // most-skilled contestant's performance - winner's performance, floored at 0
+}
+
+export interface SimulationResults {
+  params: SimulationParams;
+  winners: ContestWinner[];
+  avgWinnerLuck: number;
+  avgWinnerSkill: number;
+  pctLuckWins: number;  // % of contests where the most-skilled contestant did NOT win
+  luckScores: number[]; // winners.map(w => w.luck) — kept for Phase 2 histogram
+  avgSkillGap: number;
+}

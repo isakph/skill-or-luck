@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd /home/isak/prosjekter/skill-or-luck && npx tsc --noEmit 2>&1"
+          }
+        ]
+      }
+    ]
+  }
+}
