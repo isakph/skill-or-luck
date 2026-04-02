@@ -23,3 +23,8 @@ export interface SimulationResults {
   luckScores: number[]; // winners.map(w => w.luck) — kept for Phase 2 histogram
   avgSkillGap: number;
 }
+
+export interface SweepPoint {
+  n: number;
+  avgWinnerLuck: number;
+}
