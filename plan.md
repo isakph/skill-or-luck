@@ -93,15 +93,15 @@ src/
 **Done when**: you can adjust parameters, run simulations, and see charts update.
 
 ### Phase 3: Richer interaction
-- Hover/tooltip on chart elements showing individual contest details
-- A scatter plot of winners: x = ability+effort rank, y = luck score
-- Highlight the "most skilled contestant" vs the actual winner in visualizations
-- Responsive layout that works on both desktop and mobile
+- Scatter plot showing winners vs displaced champions: amber dots (lucky winners) vs blue dots (the most-skilled contestant they beat), plotted as skill score (x) vs luck score (y). Only contests where luck displaced skill are shown, so both clouds are the same size. The amber cloud sits higher (more luck); the blue cloud sits further right (more skill).
+- Extended simulation data: `topSkillScore` and `topSkillLuck` added to `ContestWinner` to enable the displaced-champion dots.
+- Responsive layout tweaks.
 
 **Done when**: a non-technical user can explore the simulation and understand the result without reading Frank.
 
 ### Phase 4: Animation and polish (stretch)
 - Animate a single contest: show contestants appearing, scores accumulating, winner emerging
+- **Single-contest jitter/beeswarm view (discussed, deferred from Phase 3):** Show all N contestants from one contest as dots along a single axis (skill score or performance), with random y-jitter to separate overlapping points. Circle or highlight the winner and the most-skilled contestant separately. This gives a visceral "zoom in" on one race that complements the aggregate scatter. Works best as part of the step-through/animation feature — run one contest at a time and watch the winner emerge. In Recharts this requires manually adding a random `jitterY` field to each point (computed once and stored, so it doesn't re-randomise on re-render).
 - "Step through" mode: run one contest at a time and watch results accumulate
 - Add an explanatory text panel that narrates what the user is seeing
 - Visual polish: transitions, color palette, typography

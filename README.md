@@ -1,36 +1,51 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Skill vs Luck Simulation
 
-## Getting Started
+An interactive visualization of the simulation model from the appendix of Robert Frank's *Success and Luck: Good Fortune and the Myth of Meritocracy* (2016).
 
-First, run the development server:
+The central claim: in large competitive fields, winners are rarely the most talented — they are usually among the luckiest. This holds even when luck accounts for only a small fraction of performance, because the top of the skill distribution is tightly packed and luck acts as a tiebreaker among near-equals.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## The model
+
+Each simulated contest has N contestants. Each contestant draws three scores independently from a uniform distribution on [0, 100]:
+
+- **Ability**
+- **Effort**
+- **Luck**
+
+Performance is:
+
+```
+performance = (1 − luckWeight) × (ability + effort) / 2 + luckWeight × luck
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The contestant with the highest performance score wins. Because `(ability + effort) / 2` follows a triangular distribution (peaked at 50, less variance than a single draw), the top contestants are especially tightly bunched — which makes luck increasingly decisive as N grows, even at very small `luckWeight` values.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Running locally
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm install
+npm run dev
+```
 
-## Learn More
+Open [http://localhost:3000](http://localhost:3000).
 
-To learn more about Next.js, take a look at the following resources:
+## Parameters
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Parameter    | Range          | Default | Notes              |
+|--------------|----------------|---------|--------------------|
+| Contestants  | 100 – 100,000  | 1,000   | Log scale          |
+| Luck weight  | 1% – 20%       | 5%      |                    |
+| Contests     | 100 – 10,000   | 1,000   | Contests per batch |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Design notes and trade-offs
 
-## Deploy on Vercel
+**Scatter plot sampling.** The "Winners vs displaced champions" scatter is capped at 300 points per series regardless of how many contests are run. This is a deliberate performance trade-off: Recharts renders each dot as an SVG element with event listeners, and at m = 10,000 the unsampled chart (~6,000 × 2 elements) makes the page noticeably slow. The visual pattern — two separated clouds — is equally legible at 300 points. The cost is that the clouds look sparser than they would at full density. A canvas-based renderer would remove this constraint but adds significant complexity; left for a future phase if it matters.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**Synchronous simulation.** All computation runs on the main thread. At the default settings (n = 1,000, m = 1,000) this takes roughly 100–400 ms and is acceptable. At n = 100,000 it can approach a second or two. Moving to a Web Worker would keep the UI responsive during large runs; deferred until it becomes a real problem.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Tech stack
+
+- [Next.js](https://nextjs.org) 16 (App Router) with TypeScript
+- [Tailwind CSS](https://tailwindcss.com) v4
+- [Recharts](https://recharts.org) for all charts
+- Pure `useState` — no external state library
