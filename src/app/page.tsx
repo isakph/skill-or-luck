@@ -7,6 +7,7 @@ import Controls from '@/components/Controls'
 import ResultsSummary from '@/components/ResultsSummary'
 import LuckChart from '@/components/LuckChart'
 import LuckBySizeChart from '@/components/LuckBySizeChart'
+import WinnerScatter from '@/components/WinnerScatter'
 
 const SWEEP_NS = [100, 500, 1000, 5000, 10_000, 50_000, 100_000]
 
@@ -63,6 +64,19 @@ export default function Home() {
             winners need more luck even though luck&apos;s share of performance stays constant.
           </p>
           <LuckBySizeChart sweep={sweep} />
+        </section>
+      )}
+
+      {results && results.winners.some(w => !w.wasHighestSkill) && (
+        <section className="flex flex-col gap-3">
+          <h2 className="text-lg font-semibold">Winners vs displaced champions</h2>
+          <p className="text-sm text-zinc-500">
+            Each dot is one contest where luck decided the outcome.{' '}
+            <span className="text-amber-600 font-medium">Amber</span> = actual winner,{' '}
+            <span className="text-blue-600 font-medium">blue</span> = the most-skilled contestant who lost.
+            The blue cloud sits further right (higher skill); the amber cloud sits higher (more luck).
+          </p>
+          <WinnerScatter winners={results.winners} />
         </section>
       )}
     </main>
