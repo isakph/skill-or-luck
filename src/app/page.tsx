@@ -19,15 +19,19 @@ export default function Home() {
 
   function handleRun() {
     setIsRunning(true)
-    const r = runSimulation(params)
-    setResults(r)
-    const sweepM = Math.min(params.m, 500)
-    const sw = SWEEP_NS.map(n => ({
-      n,
-      avgWinnerLuck: runSimulation({ n, m: sweepM, luckWeight: params.luckWeight }).avgWinnerLuck,
-    }))
-    setSweep(sw)
-    setIsRunning(false)
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        const result = runSimulation(params)
+        setResults(result)
+        const sweepM = Math.min(params.m, 500)
+        const sweepData = SWEEP_NS.map(n => ({
+          n,
+          avgWinnerLuck: runSimulation({ n, m: sweepM, luckWeight: params.luckWeight }).avgWinnerLuck,
+        }))
+        setSweep(sweepData)
+        setIsRunning(false)
+      }, 0)
+    })
   }
 
   return (

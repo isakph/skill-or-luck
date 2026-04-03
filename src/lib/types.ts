@@ -11,7 +11,9 @@ export interface ContestWinner {
   skillScore: number;       // (ability + effort) / 2
   performance: number;
   wasHighestSkill: boolean; // true if this contestant had the highest skillScore
-  skillGap: number;         // most-skilled contestant's performance - winner's performance, floored at 0
+  skillGap: number;         // winner's performance - most-skilled's performance, floored at 0
+  topSkillScore: number;    // skill score of the most-skilled contestant in this contest
+  topSkillLuck: number;     // luck score of that same contestant
 }
 
 export interface SimulationResults {

@@ -8,6 +8,7 @@ function runContest(n: number, luckWeight: number): ContestWinner {
 
   let topSkillScore = -Infinity
   let topSkilledPerformance = -Infinity
+  let topSkillLuck = 0
 
   for (let i = 0; i < n; i++) {
     const ability = Math.random() * 100
@@ -26,6 +27,7 @@ function runContest(n: number, luckWeight: number): ContestWinner {
     if (skillScore > topSkillScore) {
       topSkillScore = skillScore
       topSkilledPerformance = performance
+      topSkillLuck = luck
     }
   }
 
@@ -39,6 +41,8 @@ function runContest(n: number, luckWeight: number): ContestWinner {
     performance: winnerPerformance,
     wasHighestSkill: winnerSkillScore === topSkillScore,
     skillGap: Math.max(0, winnerPerformance - topSkilledPerformance),
+    topSkillScore,
+    topSkillLuck,
   }
 }
 
