@@ -30,3 +30,15 @@ export interface SweepPoint {
   n: number;
   avgWinnerLuck: number;
 }
+
+export interface BeeswarmPoint {
+  skillScore: number;
+  jitterY: number;      // random [-1, 1], assigned once in runContestWithField
+  isWinner: boolean;
+  isTopSkill: boolean;
+}
+
+export interface ContestSnapshot {
+  winner: ContestWinner;
+  field: BeeswarmPoint[];  // reservoir-sampled, max 500 points
+}
