@@ -18,11 +18,40 @@ interface Props {
   onChange: (p: SimulationParams) => void
   onRun: () => void
   isRunning: boolean
+  mode: 'batch' | 'stepthrough'
+  onModeChange: (m: 'batch' | 'stepthrough') => void
+  onStep: () => void
+  onReset: () => void
+  stepsDone: number
 }
 
-export default function Controls({ params, onChange, onRun, isRunning }: Props) {
+export default function Controls({ params, onChange, onRun, isRunning, mode, onModeChange, onStep, onReset, stepsDone }: Props) {
   return (
     <div className="flex flex-col gap-6">
+      {/* Mode toggle */}
+      <div className="flex items-center gap-1 self-start bg-zinc-100 rounded-lg p-1">
+        <button
+          onClick={() => onModeChange('batch')}
+          className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${
+            mode === 'batch'
+              ? 'bg-white text-zinc-900 shadow-sm'
+              : 'text-zinc-500 hover:text-zinc-700'
+          }`}
+        >
+          Batch run
+        </button>
+        <button
+          onClick={() => onModeChange('stepthrough')}
+          className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${
+            mode === 'stepthrough'
+              ? 'bg-white text-zinc-900 shadow-sm'
+              : 'text-zinc-500 hover:text-zinc-700'
+          }`}
+        >
+          Step-through
+        </button>
+      </div>
+
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
         <label className="flex flex-col gap-1">
           <span className="text-sm font-medium">
@@ -78,13 +107,37 @@ export default function Controls({ params, onChange, onRun, isRunning }: Props) 
         </label>
       </div>
 
-      <button
-        onClick={onRun}
-        disabled={isRunning}
-        className="self-start px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 font-medium"
-      >
-        {isRunning ? 'Running…' : 'Run Simulation'}
-      </button>
+      {mode === 'batch' ? (
+        <button
+          onClick={onRun}
+          disabled={isRunning}
+          className="self-start px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 font-medium"
+        >
+          {isRunning ? 'Running…' : 'Run Simulation'}
+        </button>
+      ) : (
+        <div className="flex items-center gap-3">
+          <button
+            onClick={onStep}
+            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium"
+          >
+            Run Next Contest
+          </button>
+          {stepsDone > 0 && (
+            <button
+              onClick={onReset}
+              className="px-4 py-3 border border-zinc-300 text-zinc-700 rounded-lg hover:bg-zinc-50 font-medium"
+            >
+              Reset
+            </button>
+          )}
+          {stepsDone > 0 && (
+            <span className="text-sm text-zinc-500">
+              {stepsDone.toLocaleString()} of {params.m.toLocaleString()} contests run
+            </span>
+          )}
+        </div>
+      )}
     </div>
   )
 }
