@@ -25,6 +25,7 @@ export default function Home() {
   const [isRunning, setIsRunning] = useState(false)
   const [mode, setMode] = useState<'batch' | 'stepthrough'>('batch')
   const [stepState, setStepState] = useState<StepState | null>(null)
+  const [batchRunCount, setBatchRunCount] = useState(0)
 
   function handleRun() {
     setIsRunning(true)
@@ -38,6 +39,7 @@ export default function Home() {
           avgWinnerLuck: runSimulation({ n, m: sweepM, luckWeight: params.luckWeight }).avgWinnerLuck,
         }))
         setSweep(sweepData)
+        setBatchRunCount(c => c + 1)
         setIsRunning(false)
       }, 0)
     })
@@ -50,6 +52,13 @@ export default function Home() {
       winners: prev ? [...prev.winners, snapshot.winner] : [snapshot.winner],
       snapshot,
     }))
+  }
+
+  function handleParamsChange(next: SimulationParams) {
+    setParams(next)
+    if (mode === 'stepthrough' && stepState) {
+      setStepState(null)
+    }
   }
 
   function handleReset() {
@@ -80,7 +89,7 @@ export default function Home() {
 
       <Controls
         params={params}
-        onChange={setParams}
+        onChange={handleParamsChange}
         onRun={handleRun}
         isRunning={isRunning}
         mode={mode}
@@ -111,13 +120,13 @@ export default function Home() {
         </section>
       )}
 
-      {displayResults && <ResultsSummary key={stepState?.contestsDone} results={displayResults} />}
+      {displayResults && <ResultsSummary key={mode === 'batch' ? `batch-${batchRunCount}` : stepState?.contestsDone} results={displayResults} />}
 
       {displayResults && (
         <section className="flex flex-col gap-3">
           <h2 className="text-lg font-semibold">Distribution of winner luck scores</h2>
           <p className="text-sm text-zinc-500">
-            How lucky were the winners across {displayResults.winners.length.toLocaleString()} contests?
+            How lucky were the winners across {displayResults.winners.length.toLocaleString()} {displayResults.winners.length === 1 ? 'contest' : 'contests'}?
             Luck is drawn uniformly from 0–100, so an unbiased winner would average 50.
           </p>
           <LuckChart luckScores={displayResults.luckScores} />

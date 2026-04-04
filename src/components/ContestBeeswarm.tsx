@@ -73,16 +73,18 @@ export default function ContestBeeswarm({ field, contestNumber, wasHighestSkill,
             opacity={0.5}
             isAnimationActive={false}
           />
+          {topSkillPoints.length > 0 && (
+            <Scatter
+              zAxisId="lg"
+              name="Most skilled"
+              data={topSkillPoints}
+              fill="#2563eb"
+              isAnimationActive={false}
+            />
+          )}
           <Scatter
             zAxisId="lg"
-            name="Most skilled"
-            data={topSkillPoints}
-            fill="#2563eb"
-            isAnimationActive={false}
-          />
-          <Scatter
-            zAxisId="lg"
-            name="Winner"
+            name={wasHighestSkill ? 'Winner (most skilled)' : 'Winner'}
             data={winnerPoints}
             fill="#d97706"
             isAnimationActive={false}
