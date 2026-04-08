@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { runSimulation, runContestWithField, computeStats } from '@/lib/simulation'
 import type { SimulationParams, SimulationResults, SweepPoint, ContestSnapshot, ContestWinner } from '@/lib/types'
 import Controls from '@/components/Controls'
@@ -26,6 +26,8 @@ export default function Home() {
   const [mode, setMode] = useState<'batch' | 'stepthrough'>('batch')
   const [stepState, setStepState] = useState<StepState | null>(null)
   const [batchRunCount, setBatchRunCount] = useState(0)
+
+  useEffect(() => { handleRun() }, [])
 
   function handleRun() {
     setIsRunning(true)
@@ -80,6 +82,12 @@ export default function Home() {
     <main className="max-w-4xl mx-auto px-6 py-12 flex flex-col gap-10">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Skill vs Luck Simulation</h1>
+        <p className="mt-2 text-zinc-600">
+          What determines if you are successful or not?
+          How important is your skill and effort, and how much do random events matter?
+          This simulation models a series of contests where skill and luck combine to determine the winner.
+          Adjust the parameters, run the simulation, and explore the results.
+        </p>
         <p className="mt-2 text-zinc-600">
           In large competitive fields, winners are rarely the most talented — they&apos;re usually among
           the luckiest. This simulation shows why, even when luck accounts for only a small fraction
