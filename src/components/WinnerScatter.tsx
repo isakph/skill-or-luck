@@ -53,7 +53,7 @@ export default function WinnerScatter({ winners }: Props) {
           type="number"
           dataKey="x"
           name="Skill score"
-          domain={['auto', 'auto']}
+          domain={['auto', 100]}
           label={{ value: 'Skill score', position: 'insideBottom', offset: -12, fontSize: 12 }}
           tick={{ fontSize: 11 }}
         />
