@@ -49,7 +49,7 @@ export default function ContestBeeswarm({ field, contestNumber, wasHighestSkill,
             type="number"
             dataKey="x"
             name="Skill"
-            domain={['auto', 'auto']}
+            domain={['auto', 100]}
             label={{ value: 'Skill score', position: 'insideBottom', offset: -16, fontSize: 12 }}
             tick={{ fontSize: 11 }}
           />
