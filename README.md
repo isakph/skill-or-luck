@@ -49,3 +49,6 @@ Open [http://localhost:3000](http://localhost:3000).
 - [Tailwind CSS](https://tailwindcss.com) v4
 - [Recharts](https://recharts.org) for all charts
 - Pure `useState` — no external state library
+
+## Bugs
+- When you shift between `Batch-run` and `Step through` on `page.tsx` the main column shifts left and right
