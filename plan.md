@@ -76,7 +76,7 @@ src/
 
 ## Build phases
 
-### Phase 1: Scaffold and simulate
+### Phase 1: Scaffold and simulate [done]
 - Scaffold Next.js project with `create-next-app`
 - Implement `simulation.ts` with the three-factor model
 - Validate output against `simulation.py` reference values
@@ -84,7 +84,7 @@ src/
 
 **Done when**: you can click "Run" and see correct numbers rendered on the page.
 
-### Phase 2: Controls and basic charts
+### Phase 2: Controls and basic charts [done]
 - Build the controls panel with sliders for n, luckWeight, and m
 - Add a results summary showing key stats (average winner luck, % where most skilled didn't win)
 - Add a histogram of winner luck scores using Recharts
@@ -92,20 +92,38 @@ src/
 
 **Done when**: you can adjust parameters, run simulations, and see charts update.
 
-### Phase 3: Richer interaction
+### Phase 3: Richer interaction [done]
 - Scatter plot showing winners vs displaced champions: amber dots (lucky winners) vs blue dots (the most-skilled contestant they beat), plotted as skill score (x) vs luck score (y). Only contests where luck displaced skill are shown, so both clouds are the same size. The amber cloud sits higher (more luck); the blue cloud sits further right (more skill).
 - Extended simulation data: `topSkillScore` and `topSkillLuck` added to `ContestWinner` to enable the displaced-champion dots.
 - Responsive layout tweaks.
 
 **Done when**: a non-technical user can explore the simulation and understand the result without reading Frank.
 
-### Phase 4: Animation and polish (stretch)
+### Phase 4: Animation and polish (stretch) [mostly done]
 - Animate a single contest: show contestants appearing, scores accumulating, winner emerging
 - **Single-contest jitter/beeswarm view (discussed, deferred from Phase 3):** Show all N contestants from one contest as dots along a single axis (skill score or performance), with random y-jitter to separate overlapping points. Circle or highlight the winner and the most-skilled contestant separately. This gives a visceral "zoom in" on one race that complements the aggregate scatter. Works best as part of the step-through/animation feature — run one contest at a time and watch the winner emerge. In Recharts this requires manually adding a random `jitterY` field to each point (computed once and stored, so it doesn't re-randomise on re-render).
 - "Step through" mode: run one contest at a time and watch results accumulate
 - Add an explanatory text panel that narrates what the user is seeing
 - Visual polish: transitions, color palette, typography
 - Consider adding the two-factor (skill + luck) model as a toggle for comparison
+
+### Phase 5: Planning a visual polish to prepare for testing on real users
+<!-- I think this is reasonable as its own point, since I want to do some fairly extensive planning -->
+- Consider: Does the UI provide the necessary UX?
+  - What UX do we want, anyway?
+- Does the UX get you hooked? Think *Hooked* by Nir Eyal
+- Does hosting choice matter for the design choices? If so, how?
+  - What is the best place for a page like this to live? As part of my personal website, say, as a standalone webpage, or something else? 
+  - Is Vercel the easiest and/or hosting option? What alternatives should be considered?
+- Make actionable notes in phases 6 and 7 to make them ready for further planning and execution
+
+**Done when**: there is a clear plan for what design choices have to be implemented in the next phase and hosting options have been noted in phase 7.
+
+### Phase 6: Implement design choices from phase 5
+- To be filled out as phase 5 is finished
+
+### Phase 7: Hosting
+- Depends on hosting choice settled on in phase 5
 
 ## Design notes
 
