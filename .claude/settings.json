@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "cd /home/isak/prosjekter/skill-or-luck && npx tsc --noEmit 2>&1"
+            "command": "cd $CLAUDE_PROJECT_DIR && npx tsc --noEmit 2>&1"
           }
         ]
       }
