@@ -119,11 +119,67 @@ src/
 
 **Done when**: there is a clear plan for what design choices have to be implemented in the next phase and hosting options have been noted in phase 7.
 
-### Phase 6: Implement design choices from phase 5
-- To be filled out as phase 5 is finished
+### Phase 6: Three-step narrative
 
-### Phase 7: Hosting
-- Depends on hosting choice settled on in phase 5
+A guided walkthrough layered on top of the existing free-exploration UI. The goal is an engaging first-contact experience for a non-technical user; free exploration remains available afterwards. Scope is deliberately modest: existing charts, basic fades, no custom SVG choreography.
+
+**Narrative structure (three steps):**
+1. **Meet the protagonist** — Introduce a fictional musician in the top 1–2% of skill with average luck. Frame the music industry as winner-takes-most. Show the protagonist's stats plainly; no simulation yet.
+2. **Watch them lose** — Run many contests with the protagonist inserted into each. Show how rarely they win despite their skill. Reuse the existing scatter or histogram, highlighting the protagonist. This is the emotional hook.
+3. **Reveal why** — Let the user drag `luckWeight` toward 0 and watch the protagonist start winning consistently. The interaction *is* the payoff: luck's tiny weight is doing all the work.
+
+**Technical work:**
+- Add optional `fixedContestant` parameter to [src/lib/simulation.ts](src/lib/simulation.ts): a contestant with preset ability/effort/luck inserted into every contest. Track per-batch how often they win and their average finishing rank. ~10–20 lines.
+- New component `components/Narrative.tsx` holding `const [step, setStep] = useState(0)` with Prev/Next controls and a step indicator (1/3, 2/3, 3/3).
+- Per-step config object: `{ copy, preset: { n, luckWeight, m }, chart: 'scatter' | 'histogram' | 'stats', interaction: 'none' | 'luckSlider' }`. Keeps step content declarative and easy to edit.
+- Step transitions: fade copy and chart with Tailwind `transition-opacity` + a keyed remount, or add `framer-motion` if the basic approach looks janky. Start without the dep.
+- Step 3 needs the existing `luckWeight` slider wired into the narrative pane and re-running simulations live as the user drags (already works in free mode — just reuse).
+- Entry point: a "Start the story" button on the landing view; an "Explore freely" escape hatch visible throughout so users aren't trapped in the narrative.
+
+**Design work (the harder part):**
+- Write the copy for each step — 2–3 short sentences, emotionally concrete, no jargon. Draft, read aloud, cut half.
+- Pick protagonist numbers that make the point cleanly: e.g. ability=98, effort=95, luck=50, with `n=1000`, `luckWeight=0.05`. Validate by running the simulation — the protagonist should win noticeably less than their skill suggests.
+- Decide what's highlighted on each chart in each step (protagonist dot in a distinct color, probably).
+- Keep the existing color convention: blue for skill, amber/gold for luck.
+
+**Explicitly out of scope:**
+- Custom SVG illustrations or character art
+- Choreographed motion between chart types
+- Audio, video, or scrollytelling libraries
+- More than three steps (resist scope creep — if step 2 feels thin, strengthen it rather than splitting it)
+
+**Done when:** a first-time visitor can click "Start the story", move through three steps, feel the unfairness in step 2, and experience the reveal in step 3 — then drop into free exploration with context for what the controls mean.
+
+### Phase 7: Hosting on Vercel
+
+Sticking with the original plan: Vercel. For a client-side-only Next.js app, it's the path of least resistance — zero config, push-to-deploy, free tier covers this easily, built by the Next.js team so no framework surprises. Alternatives (Netlify, Cloudflare Pages) are fine but not meaningfully better for this case.
+
+**Prereqs:**
+- Code is in a GitHub repo
+- `npm run build` succeeds locally (if it fails locally, it'll fail on Vercel too — fix type errors and warnings first)
+
+**Steps:**
+
+1. **Sign up at [vercel.com](https://vercel.com)** using "Continue with GitHub". Limit the GitHub app install to just the `skill-or-luck` repo.
+
+2. **Import the project:**
+   - Dashboard → **Add New → Project**
+   - Pick the `skill-or-luck` repo
+   - Vercel auto-detects Next.js — framework preset, build command (`next build`), output directory are all pre-filled. Leave them alone.
+   - Click **Deploy**. First build takes 1–2 minutes.
+
+3. **Pick a nicer URL.** Two options:
+   - *Free Vercel subdomain:* Project → Settings → Domains. Claim any free `*.vercel.app` name, e.g. `skill-and-luck.vercel.app` or `successandluck.vercel.app`.
+   - *Custom domain (~$10–15/yr):* Buy from Namecheap, Porkbun, or Cloudflare Registrar. In Vercel: Settings → Domains → Add. Vercel displays the DNS records (A + CNAME) to create at the registrar. HTTPS is automatic. A subdomain on an existing personal site (e.g. `luck.yourdomain.com`) is a nice middle ground.
+
+4. **Push-to-deploy is on by default.** Every push to `main` triggers a production deploy. Every push to another branch creates a preview deployment with its own URL — handy for sharing WIP.
+
+**Gotchas:**
+- Free tier has a build-minute limit; a personal project won't come close.
+- If server-side code is added later (API routes, server actions), those run as serverless functions — still free within the tier.
+- Environment variables live in Project → Settings → Environment Variables. None needed yet, but if analytics/telemetry keys get added, put them there — never commit them.
+
+**Done when:** the site is live at a chosen URL, push-to-main redeploys automatically, and the URL is shareable with non-technical users.
 
 ## Design notes
 
