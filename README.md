@@ -4,6 +4,10 @@ An interactive visualization of the simulation model from the appendix of Robert
 
 The central claim: in large competitive fields, winners are rarely the most talented — they are usually among the luckiest. This holds even when luck accounts for only a small fraction of performance, because the top of the skill distribution is tightly packed and luck acts as a tiebreaker among near-equals.
 
+This becomes important particularly in situations where the winner takes all or most.
+This is the situation in many fields, such as sports (tennis, golf) and business (software platforms and their network effects, for instance).
+The practical implications is often that being lucky, at a certain point, is more important than your absolute level of skill.
+
 ## The model
 
 Each simulated contest has N contestants. Each contestant draws three scores independently from a uniform distribution on [0, 100]:
