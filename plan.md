@@ -107,7 +107,7 @@ src/
 - Visual polish: transitions, color palette, typography
 - Consider adding the two-factor (skill + luck) model as a toggle for comparison
 
-### Phase 5: Planning a visual polish to prepare for testing on real users
+### Phase 5: Planning a visual polish to prepare for testing on real users \[done!]
 <!-- I think this is reasonable as its own point, since I want to do some fairly extensive planning -->
 - Consider: Does the UI provide the necessary UX?
   - What UX do we want, anyway?
@@ -120,8 +120,14 @@ src/
 **Done when**: there is a clear plan for what design choices have to be implemented in the next phase and hosting options have been noted in phase 7.
 
 ### Phase 6: Three-step narrative
+It's clear from a very brief user-testing that the *enjeu* doesn't get across. 
+So I will have to update the design and story-telling in order to get the point across much more clearly. 
+This phase is about that. 
 
-A guided walkthrough layered on top of the existing free-exploration UI. The goal is an engaging first-contact experience for a non-technical user; free exploration remains available afterwards. Scope is deliberately modest: existing charts, basic fades, no custom SVG choreography.
+More specifically, a guided walkthrough layered on top of the existing free-exploration UI.
+The goal is an engaging first-contact experience for a non-technical user; 
+free exploration remains available afterwards.
+Scope is deliberately modest: existing charts, basic fades, no custom SVG choreography.
 
 **Narrative structure (three steps):**
 1. **Meet the protagonist** — Introduce a fictional musician in the top 1–2% of skill with average luck. Frame the music industry as winner-takes-most. Show the protagonist's stats plainly; no simulation yet.
