@@ -124,18 +124,33 @@ It's clear from a very brief user-testing that the *enjeu* doesn't get across.
 So I will have to update the design and story-telling in order to get the point across much more clearly. 
 This phase is about that. 
 
-More specifically, a guided walkthrough layered on top of the existing free-exploration UI.
+More specifically, this phase is about a guided walkthrough layered on top of the existing free-exploration UI.
 The goal is an engaging first-contact experience for a non-technical user; 
 free exploration remains available afterwards.
 Scope is deliberately modest: existing charts, basic fades, no custom SVG choreography.
 
 **Narrative structure (three steps):**
-1. **Meet the protagonist** — Introduce a fictional musician in the top 1–2% of skill with average luck. Frame the music industry as winner-takes-most. Show the protagonist's stats plainly; no simulation yet.
-2. **Watch them lose** — Run many contests with the protagonist inserted into each. Show how rarely they win despite their skill. Reuse the existing scatter or histogram, highlighting the protagonist. This is the emotional hook.
-3. **Reveal why** — Let the user drag `luckWeight` toward 0 and watch the protagonist start winning consistently. The interaction *is* the payoff: luck's tiny weight is doing all the work.
+1. **Meet the protagonist** — Introduce a fictional musician in the top 0.5% of skill with slightly above average luck, with a value of 60.
+(Let both ability and effort equal 99, which on average is about the top 0.5% of skill given that it's a double draw, I reckon.) 
+Frame the music industry as winner-takes-most; this can be achieved by saying that a label is watching the protagonist's subgenre closely this year and will award a record deal to the most popular artist.
+Show the protagonist's stats plainly;
+no simulation yet.
+The protagonist is among the most skilled, and is a bit more lucky than most – he or she can expect to have things go their way more often than not, but as it turns out, that's not enough.
+2. **Watch them lose** — Run a contest with the protagonist inserted into each.
+Show that a less skilled competitor gets the record deal based on the small luck component (connections, random hits, etc.), which accounts for only 10% of the final score.
+Reuse the existing scatter or histogram, highlighting the protagonist.
+This is the emotional hook.
+Now let the user run the contests again and again however many times they'd like before proceeding to the next step, giving the user an intuition (to the extent that they want one) for how large a part the 10% luck plays, even for someone with above average luck.
+Batch runs come into play here.
+It should be easy to discern how you run a new simulation and how you proceed to the next step. 
+3. **Reveal why** — Let the user drag `luckWeight` toward 0 and watch the protagonist win the record deal more consistently (or let them drag it towards 100 and watch the protagonist lose out more and more often).
+This interaction *is* the payoff of the narrative:
+a small random component – luck – is doing the work.
 
 **Technical work:**
 - Add optional `fixedContestant` parameter to [src/lib/simulation.ts](src/lib/simulation.ts): a contestant with preset ability/effort/luck inserted into every contest. Track per-batch how often they win and their average finishing rank. ~10–20 lines.
+This `fixedContestant` is necessary for the simulations we will be doing in the narrative section.
+- Add possibility for seeding for the narrative parts. 
 - New component `components/Narrative.tsx` holding `const [step, setStep] = useState(0)` with Prev/Next controls and a step indicator (1/3, 2/3, 3/3).
 - Per-step config object: `{ copy, preset: { n, luckWeight, m }, chart: 'scatter' | 'histogram' | 'stats', interaction: 'none' | 'luckSlider' }`. Keeps step content declarative and easy to edit.
 - Step transitions: fade copy and chart with Tailwind `transition-opacity` + a keyed remount, or add `framer-motion` if the basic approach looks janky. Start without the dep.
@@ -143,8 +158,10 @@ Scope is deliberately modest: existing charts, basic fades, no custom SVG choreo
 - Entry point: a "Start the story" button on the landing view; an "Explore freely" escape hatch visible throughout so users aren't trapped in the narrative.
 
 **Design work (the harder part):**
+- Pick protagonist numbers that make the point cleanly: e.g. ability=99, effort=99, luck=60, with `n=2000`, `luckWeight=0.1`.
+This also requires a seed that makes it possible to write copy based on what the seed shows.
+Validate by running the simulation — the protagonist should rank top 1% noticeably less than their skill suggests.
 - Write the copy for each step — 2–3 short sentences, emotionally concrete, no jargon. Draft, read aloud, cut half.
-- Pick protagonist numbers that make the point cleanly: e.g. ability=98, effort=95, luck=50, with `n=1000`, `luckWeight=0.05`. Validate by running the simulation — the protagonist should win noticeably less than their skill suggests.
 - Decide what's highlighted on each chart in each step (protagonist dot in a distinct color, probably).
 - Keep the existing color convention: blue for skill, amber/gold for luck.
 
