@@ -42,3 +42,36 @@ export interface ContestSnapshot {
   winner: ContestWinner;
   field: BeeswarmPoint[];  // reservoir-sampled, max 500 points
 }
+
+export interface FixedContestant {
+  ability: number;
+  effort: number;
+  luck: number;
+}
+
+export interface ProtagSample {
+  skill: number;
+  luck: number;
+  perf: number;
+  isYou: boolean;
+  isWinner: boolean;
+}
+
+export interface ProtagContestResult {
+  rank: number;
+  youWon: boolean;
+  youPerf: number;
+  winnerSkill: number;
+  winnerLuck: number;
+  winnerPerf: number;
+  mostSkilledWon: boolean;
+  sample: ProtagSample[];
+}
+
+export interface ProtagBatchResult {
+  wins: number;
+  totalContests: number;
+  avgRank: number;
+  mostSkilledWonPct: number;
+  winnerLuckBins: number[];  // 20 bins, each 5 wide (0-5, 5-10, ..., 95-100)
+}

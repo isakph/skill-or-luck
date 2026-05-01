@@ -1,28 +1,51 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #faf8f4;
+  --bg-2: #f3efe7;
+  --ink: #1a1814;
+  --ink-2: #4a463e;
+  --ink-3: #8a8478;
+  --rule: #d8d2c4;
+  --skill: #1d4ed8;
+  --skill-soft: #c7d6f7;
+  --luck: #b45309;
+  --luck-soft: #f4d9a8;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-background: var(--bg);
+  --color-foreground: var(--ink);
+  --font-serif: var(--font-serif);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-serif), Georgia, "Times New Roman", serif;
+  font-size: 19px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "kern", "liga", "onum";
+}
+
+/* --- Animations --- */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fadeUp 0.35s ease-out;
 }
 
 @keyframes fade-in {
@@ -32,4 +55,53 @@ body {
 
 .animate-fade-in {
   animation: fade-in 0.3s ease-in-out;
+}
+
+/* --- Custom range slider (step 3) --- */
+input[type="range"].big-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  background: linear-gradient(
+    90deg,
+    var(--skill-soft) 0%,
+    var(--rule) 50%,
+    var(--luck-soft) 100%
+  );
+  border-radius: 999px;
+  outline: none;
+  cursor: pointer;
+}
+
+input[type="range"].big-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--ink);
+  border: 4px solid var(--bg);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  cursor: grab;
+}
+
+input[type="range"].big-slider::-moz-range-thumb {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--ink);
+  border: 4px solid var(--bg);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  cursor: grab;
+}
+
+/* --- Mobile responsive --- */
+@media (max-width: 640px) {
+  .narrative-grid-3 { grid-template-columns: 1fr !important; }
+  .narrative-grid-2 { grid-template-columns: 1fr !important; }
+  .narrative-grid-batch { grid-template-columns: 1fr !important; }
+  .narrative-stage { padding: 56px 20px 80px !important; }
+  .narrative-topbar-inner { padding: 12px 20px !important; }
+  .narrative-stat-num { font-size: 48px !important; }
 }
