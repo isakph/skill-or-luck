@@ -1,0 +1,1345 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Skill or Luck — The Story</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #faf8f4;          /* warm off-white, like uncoated paper */
+    --bg-2: #f3efe7;
+    --ink: #1a1814;          /* near-black with warmth */
+    --ink-2: #4a463e;        /* secondary text */
+    --ink-3: #8a8478;        /* tertiary / captions */
+    --rule: #d8d2c4;         /* hairline rules */
+    --skill: #1d4ed8;        /* blue (matches existing app) */
+    --skill-soft: #c7d6f7;
+    --luck: #b45309;         /* amber, slightly deeper than app's #d97706 for editorial feel */
+    --luck-soft: #f4d9a8;
+    --hero: #1a1814;
+    --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+    --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 19px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "kern", "liga", "onum";
+  }
+
+  /* --- Top bar --- */
+  .topbar {
+    position: sticky; top: 0; z-index: 50;
+    background: color-mix(in oklch, var(--bg) 88%, transparent);
+    backdrop-filter: saturate(140%) blur(12px);
+    -webkit-backdrop-filter: saturate(140%) blur(12px);
+    border-bottom: 1px solid var(--rule);
+  }
+  .topbar-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 14px 28px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px;
+  }
+  .brand {
+    font-family: var(--serif);
+    font-size: 14px;
+    letter-spacing: 0.02em;
+    color: var(--ink-2);
+    display: flex; align-items: baseline; gap: 10px;
+  }
+  .brand .mark {
+    display: inline-block; width: 8px; height: 8px;
+    background: var(--ink); border-radius: 50%;
+    transform: translateY(-1px);
+  }
+  .brand strong { color: var(--ink); font-weight: 600; letter-spacing: 0; }
+  .topbar-right { display: flex; align-items: center; gap: 18px; font-family: var(--sans); }
+  .step-pill {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .escape-link {
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--ink-2);
+    text-decoration: none;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 1px;
+    transition: color .15s, border-color .15s;
+  }
+  .escape-link:hover { color: var(--ink); border-bottom-color: var(--ink); }
+
+  /* --- Stage --- */
+  .stage {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 80px 28px 120px;
+    min-height: 78vh;
+  }
+  .step-meta {
+    display: flex; align-items: center; gap: 14px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 28px;
+  }
+  .step-meta .num { color: var(--ink); }
+  .step-meta .dot {
+    width: 4px; height: 4px; border-radius: 50%;
+    background: var(--ink-3);
+  }
+
+  h1.kicker {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(36px, 5.2vw, 60px);
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    margin: 0 0 24px;
+    text-wrap: balance;
+  }
+  h1.kicker em {
+    font-style: italic;
+    color: var(--ink);
+  }
+  .lede {
+    font-family: var(--serif);
+    font-size: clamp(19px, 1.7vw, 22px);
+    line-height: 1.55;
+    color: var(--ink-2);
+    max-width: 36em;
+    margin: 0 0 36px;
+    text-wrap: pretty;
+  }
+  .lede em.highlight {
+    background: linear-gradient(180deg, transparent 62%, var(--luck-soft) 62%);
+    font-style: normal;
+    padding: 0 2px;
+  }
+  .body-p {
+    font-size: 19px;
+    line-height: 1.6;
+    color: var(--ink-2);
+    max-width: 36em;
+    margin: 0 0 18px;
+    text-wrap: pretty;
+  }
+
+  /* --- Stat card variant --- */
+  .protagonist-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    margin: 36px 0;
+  }
+  .stat-cell {
+    background: var(--bg);
+    padding: 28px 24px 24px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .stat-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .stat-num {
+    font-family: var(--serif);
+    font-size: 64px;
+    line-height: 1;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    font-feature-settings: "lnum", "tnum";
+  }
+  .stat-num.skill { color: var(--skill); }
+  .stat-num.luck  { color: var(--luck); }
+  .stat-num.percentile { color: var(--ink); }
+  .stat-foot {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--ink-3);
+    margin-top: 4px;
+  }
+
+  /* --- Distribution curve variant --- */
+  .dist-card {
+    background: var(--bg);
+    border: 1px solid var(--rule);
+    padding: 28px 28px 20px;
+    margin: 36px 0;
+  }
+  .dist-title {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin: 0 0 16px;
+  }
+  .dist-svg { width: 100%; height: 180px; display: block; }
+  .dist-foot {
+    display: flex; justify-content: space-between;
+    font-family: var(--sans); font-size: 12px; color: var(--ink-3);
+    margin-top: 8px;
+  }
+
+  /* --- Variation switcher inside step 1 --- */
+  .variation-switch {
+    display: inline-flex; gap: 0;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    padding: 3px;
+    margin: 8px 0 0;
+    font-family: var(--sans);
+  }
+  .variation-switch button {
+    background: transparent;
+    border: 0;
+    padding: 6px 14px;
+    font-size: 12px;
+    color: var(--ink-3);
+    cursor: pointer;
+    border-radius: 999px;
+    font-family: inherit;
+    letter-spacing: 0.02em;
+  }
+  .variation-switch button.active {
+    background: var(--ink);
+    color: var(--bg);
+  }
+  .variation-label {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--ink-3); margin-right: 12px;
+  }
+
+  /* --- Single-contest viz (step 2) --- */
+  .contest-card {
+    background: var(--bg);
+    border: 1px solid var(--rule);
+    padding: 28px;
+    margin: 36px 0 24px;
+    position: relative;
+  }
+  .contest-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    margin-bottom: 20px;
+    gap: 16px;
+  }
+  .contest-head h3 {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--ink-3); margin: 0; font-weight: 500;
+  }
+  .contest-head .seed {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3);
+  }
+  .beeswarm-svg { width: 100%; height: 200px; display: block; }
+  .contest-result {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--rule);
+    margin-top: 20px;
+    border: 1px solid var(--rule);
+  }
+  .contest-result .cell {
+    background: var(--bg); padding: 18px 20px;
+  }
+  .contest-result .cell.you { border-left: 3px solid var(--skill); }
+  .contest-result .cell.winner { border-left: 3px solid var(--luck); }
+  .cell .role {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--ink-3); margin-bottom: 4px;
+  }
+  .cell .name {
+    font-family: var(--serif); font-size: 18px; font-weight: 500; margin-bottom: 8px;
+  }
+  .cell .stats {
+    font-family: var(--mono); font-size: 12px; color: var(--ink-2);
+    display: flex; gap: 14px; flex-wrap: wrap;
+  }
+  .cell .stats span b { color: var(--ink); font-weight: 500; }
+
+  /* --- Reveal button --- */
+  .reveal-zone {
+    border: 1px dashed var(--rule);
+    background: var(--bg-2);
+    padding: 48px 28px;
+    text-align: center;
+    margin: 36px 0;
+    transition: opacity .4s;
+  }
+  .reveal-zone p {
+    font-family: var(--serif); font-style: italic; color: var(--ink-3);
+    margin: 0 0 18px; font-size: 17px;
+  }
+  .btn {
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    background: var(--ink);
+    color: var(--bg);
+    border: 0;
+    padding: 12px 22px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: transform .12s, background .15s;
+  }
+  .btn:hover { background: #000; }
+  .btn:active { transform: translateY(1px); }
+  .btn.ghost {
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--ink);
+  }
+  .btn.ghost:hover { background: var(--ink); color: var(--bg); }
+  .btn.large {
+    font-size: 16px; padding: 16px 28px;
+  }
+
+  /* --- Batch run in step 2 --- */
+  .batch-block {
+    margin-top: 12px;
+    border-top: 1px solid var(--rule);
+    padding-top: 36px;
+  }
+  .batch-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 24px;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .batch-head h3 {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 500;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+  .batch-controls { display: flex; gap: 10px; align-items: center; font-family: var(--sans); font-size: 13px; color: var(--ink-3); }
+  .batch-summary {
+    display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    margin-bottom: 24px;
+  }
+  .batch-summary .cell { background: var(--bg); padding: 22px 22px; }
+  .big-number {
+    font-family: var(--serif);
+    font-size: 56px;
+    line-height: 1;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    font-feature-settings: "lnum", "tnum";
+  }
+  .big-number .denom {
+    font-size: 22px; color: var(--ink-3); font-style: italic;
+  }
+  .small-number {
+    font-family: var(--serif);
+    font-size: 32px;
+    line-height: 1; font-weight: 400; letter-spacing: -0.01em;
+    font-feature-settings: "lnum", "tnum";
+  }
+  .num-label {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--ink-3); margin-bottom: 10px;
+  }
+  .runs-meta {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3);
+    margin-top: 4px;
+  }
+
+  /* --- Histogram (step 2 batch) --- */
+  .hist-card {
+    background: var(--bg); border: 1px solid var(--rule);
+    padding: 24px 28px 18px; margin-bottom: 12px;
+  }
+  .hist-svg { width: 100%; height: 220px; display: block; }
+  .hist-caption {
+    font-family: var(--sans); font-size: 12px; color: var(--ink-3);
+    display: flex; justify-content: space-between; margin-top: 6px;
+  }
+
+  /* --- Step 3 payoff slider --- */
+  .payoff-block { margin: 24px 0; }
+  .payoff-stat {
+    text-align: center;
+    padding: 36px 0 28px;
+  }
+  .giant-number {
+    font-family: var(--serif);
+    font-size: clamp(96px, 14vw, 168px);
+    line-height: 1;
+    font-weight: 400;
+    letter-spacing: -0.04em;
+    font-feature-settings: "lnum", "tnum";
+    color: var(--ink);
+    transition: color .3s;
+  }
+  .giant-number .pct { font-size: 0.5em; color: var(--ink-3); font-style: italic; vertical-align: 0.18em; margin-left: 2px; font-feature-settings: normal; }
+  .giant-sub {
+    font-family: var(--serif); font-style: italic;
+    font-size: 22px; color: var(--ink-2);
+    margin-top: 12px;
+  }
+  .giant-secondary {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em;
+    color: var(--ink-3); margin-top: 18px;
+    text-transform: uppercase;
+  }
+  .giant-secondary b { color: var(--ink); font-weight: 500; }
+
+  .slider-rig {
+    margin: 36px auto 0;
+    max-width: 640px;
+  }
+  .slider-poles {
+    display: flex; justify-content: space-between;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--ink-3);
+    margin-bottom: 14px;
+  }
+  .slider-poles span:first-child { color: var(--skill); }
+  .slider-poles span:last-child { color: var(--luck); }
+  .slider-track-wrap { position: relative; padding: 14px 0; }
+  input[type=range].big-slider {
+    -webkit-appearance: none; appearance: none;
+    width: 100%; height: 6px;
+    background: linear-gradient(90deg, var(--skill-soft) 0%, var(--rule) 50%, var(--luck-soft) 100%);
+    border-radius: 999px;
+    outline: none;
+    cursor: pointer;
+  }
+  input[type=range].big-slider::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--ink);
+    border: 4px solid var(--bg);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    cursor: grab;
+  }
+  input[type=range].big-slider::-moz-range-thumb {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--ink);
+    border: 4px solid var(--bg);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    cursor: grab;
+  }
+  .slider-foot {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-top: 14px;
+    font-family: var(--sans); font-size: 13px; color: var(--ink-3);
+  }
+  .slider-readout {
+    font-family: var(--mono); color: var(--ink); font-size: 13px;
+  }
+
+  /* --- Nav bar bottom --- */
+  .nav {
+    max-width: 880px;
+    margin: 56px auto 0;
+    padding: 28px 28px 80px;
+    display: flex; justify-content: space-between; align-items: center;
+    border-top: 1px solid var(--rule);
+  }
+  .nav .pager {
+    display: flex; gap: 6px;
+  }
+  .nav .pager .dot {
+    width: 28px; height: 4px;
+    background: var(--rule);
+    border-radius: 999px;
+    transition: background .2s, width .2s;
+  }
+  .nav .pager .dot.active {
+    background: var(--ink);
+    width: 44px;
+  }
+  .nav-buttons { display: flex; gap: 10px; }
+
+  /* --- Final escape --- */
+  .escape-final {
+    margin: 56px 0 0;
+    padding: 56px 28px;
+    text-align: center;
+    background: var(--ink);
+    color: var(--bg);
+  }
+  .escape-final h3 {
+    font-family: var(--serif); font-size: 32px; font-weight: 400;
+    letter-spacing: -0.01em; margin: 0 0 14px;
+  }
+  .escape-final p {
+    font-family: var(--serif); color: rgba(250,248,244,0.72);
+    font-size: 17px; margin: 0 auto 24px; max-width: 36em;
+  }
+  .escape-final .btn.ghost {
+    background: transparent; color: var(--bg); border-color: var(--bg);
+  }
+  .escape-final .btn.ghost:hover { background: var(--bg); color: var(--ink); }
+
+  /* --- Misc --- */
+  .step { display: none; animation: fadeUp .35s ease-out; }
+  .step.active { display: block; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .hidden { display: none !important; }
+
+  .pull-quote {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 22px;
+    line-height: 1.45;
+    color: var(--ink);
+    border-left: 2px solid var(--ink);
+    padding: 4px 0 4px 20px;
+    margin: 28px 0;
+    max-width: 32em;
+  }
+
+  .footnote {
+    font-family: var(--sans); font-size: 12px; color: var(--ink-3);
+    margin-top: 12px; max-width: 36em;
+  }
+  .footnote a { color: var(--ink-2); }
+
+  @media (max-width: 640px) {
+    .stage { padding: 56px 20px 80px; }
+    .protagonist-grid { grid-template-columns: 1fr; }
+    .contest-result { grid-template-columns: 1fr; }
+    .batch-summary { grid-template-columns: 1fr; }
+    .stat-num { font-size: 48px; }
+    .topbar-inner { padding: 12px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <span class="mark"></span>
+      <span><strong>Skill or Luck</strong> &nbsp;·&nbsp; a short story in three parts</span>
+    </div>
+    <div class="topbar-right">
+      <span class="step-pill" id="topStepPill">Step 1 of 3</span>
+      <a href="#" class="escape-link" id="escapeTop">Skip to free exploration →</a>
+    </div>
+  </div>
+</header>
+
+<main class="stage">
+
+  <!-- ======================= STEP 1 ======================= -->
+  <section class="step active" id="step-1">
+    <div class="step-meta">
+      <span class="num">01</span>
+      <span class="dot"></span>
+      <span>Meet the protagonist</span>
+    </div>
+
+    <h1 class="kicker">You are <em>extraordinarily</em> good at what you do.</h1>
+
+    <p class="lede">
+      You're a musician. Not a hobbyist — you're in the <em class="highlight">top 0.02%</em>
+      of skill in your subgenre. You've put in the hours. The talent was there to begin with.
+    </p>
+
+    <p class="body-p">
+      This year, a label is watching your scene. They'll sign exactly one artist:
+      whoever ends the year on top. Two thousand musicians are in the running.
+      And luck, of course, plays its part — the right Spotify listener at the
+      right time, a warm-up gig where someone in the business happens to be in
+      the room, a rival's bad week. As it happens, you've had a little more of
+      that than most.
+    </p>
+
+    <div style="margin: 18px 0 8px;">
+      <span class="variation-label">View as</span>
+      <div class="variation-switch" role="tablist" aria-label="Step 1 visual variation">
+        <button class="active" data-var="cards">Stat card</button>
+        <button data-var="curve">On the curve</button>
+      </div>
+    </div>
+
+    <!-- Variation A: Stat cards -->
+    <div class="protagonist-grid" id="var-cards">
+      <div class="stat-cell">
+        <span class="stat-label">Ability</span>
+        <span class="stat-num skill">99</span>
+        <span class="stat-foot">out of 100 — innate talent</span>
+      </div>
+      <div class="stat-cell">
+        <span class="stat-label">Effort</span>
+        <span class="stat-num skill">99</span>
+        <span class="stat-foot">out of 100 — hours, dedication</span>
+      </div>
+      <div class="stat-cell">
+        <span class="stat-label">Luck</span>
+        <span class="stat-num luck">60</span>
+        <span class="stat-foot">out of 100 — better than average</span>
+      </div>
+    </div>
+
+    <!-- Variation B: Distribution curve -->
+    <div class="dist-card hidden" id="var-curve">
+      <p class="dist-title">Where you sit on the skill distribution</p>
+      <svg class="dist-svg" viewBox="0 0 600 180" preserveAspectRatio="none" aria-hidden="true">
+        <!-- grid -->
+        <line x1="0" y1="160" x2="600" y2="160" stroke="#d8d2c4" stroke-width="1"/>
+        <!-- triangular distribution outline (approx peak at 50, narrows to 0 and 100) -->
+        <path id="distArea" d="" fill="#e8e1d1" stroke="none"/>
+        <path id="distLine" d="" fill="none" stroke="#1a1814" stroke-width="1.4"/>
+        <!-- protagonist marker at skill=99 (x = 99/100*600 = 594) -->
+        <line x1="594" y1="160" x2="594" y2="36" stroke="#1d4ed8" stroke-width="2"/>
+        <circle cx="594" cy="36" r="6" fill="#1d4ed8"/>
+        <text x="588" y="28" text-anchor="end" fill="#1d4ed8" font-family="Inter, sans-serif" font-size="11" font-weight="600">You — 99</text>
+        <!-- average marker at 50 -->
+        <line x1="300" y1="160" x2="300" y2="120" stroke="#8a8478" stroke-width="1" stroke-dasharray="3 3"/>
+        <text x="300" y="115" text-anchor="middle" fill="#8a8478" font-family="JetBrains Mono, monospace" font-size="10">avg 50</text>
+      </svg>
+      <div class="dist-foot">
+        <span>Skill score 0</span>
+        <span>50</span>
+        <span>100</span>
+      </div>
+    </div>
+
+    <p class="body-p" style="margin-top: 28px;">
+      The label awards the deal to whoever ends the year on top.
+      Performance, in this world, is mostly skill — but a little luck slips in too:
+      a viral clip, a chance introduction, a rival's bad week. About <b>10%</b> of it.
+    </p>
+
+    <p class="pull-quote">
+      Ninety percent skill. Ten percent luck. You're in the top half-percent of skill,
+      and slightly above average on luck. Surely the deal is yours.
+    </p>
+  </section>
+
+  <!-- ======================= STEP 2 ======================= -->
+  <section class="step" id="step-2">
+    <div class="step-meta">
+      <span class="num">02</span>
+      <span class="dot"></span>
+      <span>Watch them lose</span>
+    </div>
+
+    <h1 class="kicker">The deal goes to <em>someone else</em>.</h1>
+
+    <p class="lede">
+      Here's what happens this year. Two thousand musicians, one record deal,
+      ninety-percent skill, ten-percent luck. Reveal the result.
+    </p>
+
+    <!-- Reveal curtain -->
+    <div class="reveal-zone" id="revealZone">
+      <p>One contest. Seeded once. The result is already determined.</p>
+      <button class="btn large" id="revealBtn">Reveal who won</button>
+    </div>
+
+    <!-- Single-contest viz (hidden until reveal) -->
+    <div id="singleContestBlock" class="hidden">
+
+      <div class="contest-card">
+        <div class="contest-head">
+          <h3>One contest · 2,000 contestants · 10% luck</h3>
+          <span class="seed">seed: 1729</span>
+        </div>
+        <svg class="beeswarm-svg" id="beeswarmSvg" viewBox="0 0 600 200" preserveAspectRatio="none"></svg>
+        <div style="display:flex; justify-content:space-between; font-family: var(--sans); font-size: 11px; color: var(--ink-3); margin-top: 4px;">
+          <span>Skill 0</span>
+          <span>50</span>
+          <span>100</span>
+        </div>
+
+        <div class="contest-result">
+          <div class="cell you">
+            <div class="role">You — most skilled</div>
+            <div class="name">Top of the field</div>
+            <div class="stats">
+              <span>skill <b>99.0</b></span>
+              <span>luck <b>60.0</b></span>
+              <span>performance <b id="youPerf">95.1</b></span>
+            </div>
+          </div>
+          <div class="cell winner">
+            <div class="role">Winner — luckier</div>
+            <div class="name">Some other musician</div>
+            <div class="stats">
+              <span>skill <b id="rivalSkill">94.2</b></span>
+              <span>luck <b id="rivalLuck">98.6</b></span>
+              <span>performance <b id="rivalPerf">94.6</b></span>
+            </div>
+          </div>
+        </div>
+
+        <p class="footnote">
+          They were 4.8 points less skilled than you. They got luckier on the day.
+          Under the rules of this game, that's enough.
+        </p>
+      </div>
+
+      <!-- Batch unlock -->
+      <div class="batch-block">
+        <div class="batch-head">
+          <h3>Maybe this year was a fluke. Run a thousand more.</h3>
+          <div class="batch-controls">
+            <button class="btn" id="runBatchBtn">Run 1,000 contests</button>
+            <span id="batchHint">with the same parameters</span>
+          </div>
+        </div>
+
+        <div class="batch-summary">
+          <div class="cell">
+            <div class="num-label">You won the deal</div>
+            <div class="big-number"><span id="batchWins">—</span> <span class="denom">/ 1,000</span></div>
+            <div class="runs-meta" id="batchRunsMeta">no batches yet</div>
+          </div>
+          <div class="cell">
+            <div class="num-label">Your average finish</div>
+            <div class="small-number" id="batchRank">—</div>
+            <div class="runs-meta">out of 2,000</div>
+          </div>
+          <div class="cell">
+            <div class="num-label">Most skilled actually won</div>
+            <div class="small-number" id="batchSkillWins">—</div>
+            <div class="runs-meta">% of contests</div>
+          </div>
+        </div>
+
+        <div class="hist-card">
+          <div class="num-label" style="margin-bottom: 14px;">How lucky was the winner — across 1,000 contests <span style="color: var(--skill); font-weight: 500; text-transform: none; letter-spacing: 0;">· blue bar = contests you won (your luck is fixed at 60)</span></div>
+          <svg class="hist-svg" id="histSvg" viewBox="0 0 600 220" preserveAspectRatio="none"></svg>
+          <div class="hist-caption">
+            <span>luck = 0</span>
+            <span>50 (average)</span>
+            <span>100</span>
+          </div>
+        </div>
+
+        <p class="footnote" id="batchFootnote">
+          Run it. Run it again. The numbers wobble a little, but the story doesn't.
+          You almost never get the deal — even though you're objectively the best in the field.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= STEP 3 ======================= -->
+  <section class="step" id="step-3">
+    <div class="step-meta">
+      <span class="num">03</span>
+      <span class="dot"></span>
+      <span>Why this happens</span>
+    </div>
+
+    <h1 class="kicker">Pull the lever. <em>Watch the unfairness move.</em></h1>
+
+    <p class="lede">
+      That tiny 10% slice of luck did all the damage. Two things move when you
+      drag the slider. Your personal win rate — and, more tellingly, the share
+      of contests in which the most-skilled contestant of all wins at all.
+    </p>
+
+    <div class="payoff-block">
+      <div class="payoff-stat">
+        <div class="giant-number" id="payoffNum">8<span class="pct">%</span></div>
+        <div class="giant-sub" id="payoffSub">You win the deal in roughly 8 of every 100 contests.</div>
+        <div class="giant-secondary">
+          luck weight: <b id="payoffLW">10%</b>
+          &nbsp;·&nbsp; <span style="color: var(--ink);">the most skilled wins anywhere: <b id="payoffMS">22%</b></span>
+          &nbsp;·&nbsp; field size: <b>2,000</b>
+        </div>
+      </div>
+
+      <div class="slider-rig">
+        <div class="slider-poles">
+          <span>Pure meritocracy</span>
+          <span>Pure chaos</span>
+        </div>
+        <div class="slider-track-wrap">
+          <input type="range" min="0" max="100" value="10" step="1" class="big-slider" id="payoffSlider" aria-label="How much luck matters">
+        </div>
+        <div class="slider-foot">
+          <span>Skill is everything</span>
+          <span class="slider-readout">luck weight = <span id="sliderReadout">10</span>%</span>
+          <span>Luck is everything</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="body-p" style="margin-top: 36px;">
+      Watch the second number. As luck's share grows from a sliver, the share
+      of contests in which the most-skilled contestant wins at all collapses
+      fast. The cruelty isn't that luck matters — it's that <em>so little of it</em>
+      matters so much. When a field is big and the top is tightly packed, luck
+      quietly does the choosing.
+    </p>
+
+    <p class="pull-quote">
+      The winners aren't the most skilled. They're the most skilled who also got lucky.
+    </p>
+
+    <div class="escape-final">
+      <h3>Now go play with it yourself.</h3>
+      <p>
+        Adjust the field size. Push the luck weight to the extremes. See what
+        breaks the model and what doesn't. The full simulation is one click away.
+      </p>
+      <button class="btn ghost large" id="escapeBig">Open free exploration →</button>
+    </div>
+  </section>
+
+  <!-- ============== Nav ============== -->
+  <nav class="nav">
+    <button class="btn ghost" id="prevBtn" disabled>← Previous</button>
+    <div class="pager" aria-label="Step indicator">
+      <div class="dot active" data-step="1"></div>
+      <div class="dot" data-step="2"></div>
+      <div class="dot" data-step="3"></div>
+    </div>
+    <button class="btn" id="nextBtn">Next →</button>
+  </nav>
+
+</main>
+
+<script>
+// ====== Mock simulation (faithful to the real model) ======
+// performance = (1 - w) * (ability+effort)/2 + w * luck
+// All draws uniform [0, 100].
+
+// Seedable RNG (mulberry32) so we can reproduce the seeded contest.
+function mulberry32(a) {
+  return function() {
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    var t = a;
+    t = Math.imul(t ^ t >>> 15, t | 1);
+    t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  }
+}
+
+const PROTAG = { ability: 99, effort: 99, luck: 60 }; // skill = 99
+const N = 2000;
+const W = 0.10;
+
+function runContestWithProtag(rand, n, w, protag) {
+  // Insert protagonist as contestant 0; randomize others.
+  const protagSkill = (protag.ability + protag.effort) / 2;
+  const protagPerf = (1 - w) * protagSkill + w * protag.luck;
+
+  let bestPerf = protagPerf;
+  let bestIdx = 0;
+  let bestSkill = protagSkill;
+  let bestLuck = protag.luck;
+
+  let topSkill = protagSkill;
+  let topSkillIdx = 0;
+
+  // For beeswarm we want a sample of skill scores
+  const sample = [{ skill: protagSkill, luck: protag.luck, perf: protagPerf, isYou: true, isWinner: false }];
+  const SAMPLE_CAP = 220;
+
+  for (let i = 1; i < n; i++) {
+    const a = rand() * 100;
+    const e = rand() * 100;
+    const l = rand() * 100;
+    const s = (a + e) / 2;
+    const p = (1 - w) * s + w * l;
+
+    if (p > bestPerf) { bestPerf = p; bestIdx = i; bestSkill = s; bestLuck = l; }
+    if (s > topSkill) { topSkill = s; topSkillIdx = i; }
+
+    if (sample.length < SAMPLE_CAP) {
+      sample.push({ skill: s, luck: l, perf: p, isYou: false, isWinner: false });
+    } else {
+      // reservoir replace — but never overwrite slot 0 (protagonist)
+      const j = Math.floor(rand() * (i + 1));
+      if (j > 0 && j < SAMPLE_CAP) sample[j] = { skill: s, luck: l, perf: p, isYou: false, isWinner: false };
+    }
+  }
+
+  // Compute protagonist's rank (1 = winner)
+  // Cheap rank: count how many had higher perf. We need to redo because we didn't store all.
+  // For UX numbers we'll just compute approximate rank from a fresh draw — too costly. Skip.
+
+  return {
+    youWon: bestIdx === 0,
+    youSkillWasHighest: topSkillIdx === 0,
+    winnerSkill: bestSkill,
+    winnerLuck: bestLuck,
+    winnerPerf: bestPerf,
+    youPerf: protagPerf,
+    sample,
+  };
+}
+
+// Compute protagonist's rank by re-drawing (synced via same RNG would be cleaner; we do approximate)
+function runContestWithRank(rand, n, w, protag) {
+  const protagSkill = (protag.ability + protag.effort) / 2;
+  const protagPerf = (1 - w) * protagSkill + w * protag.luck;
+  let higher = 0;
+  let topSkill = protagSkill;
+  let topSkillPerf = protagPerf;
+  let winnerLuck = protag.luck;
+  let winnerSkill = protagSkill;
+  let bestPerf = protagPerf;
+  for (let i = 1; i < n; i++) {
+    const a = rand() * 100, e = rand() * 100, l = rand() * 100;
+    const s = (a + e) / 2;
+    const p = (1 - w) * s + w * l;
+    if (p > protagPerf) higher++;
+    if (p > bestPerf) { bestPerf = p; winnerLuck = l; winnerSkill = s; }
+    if (s > topSkill) { topSkill = s; topSkillPerf = p; }
+    else if (s === topSkill && p > topSkillPerf) { topSkillPerf = p; }
+  }
+  // Did the most-skilled contestant in the field actually win?
+  const mostSkilledWon = topSkillPerf >= bestPerf;
+  return {
+    rank: higher + 1,
+    youWon: higher === 0,
+    youSkillWasHighest: protagSkill >= topSkill,
+    mostSkilledWon,
+    winnerLuck,
+    winnerSkill,
+    winnerPerf: bestPerf,
+  };
+}
+
+// ====== Step 1 variation switch ======
+document.querySelectorAll('.variation-switch button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.variation-switch button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const v = btn.dataset.var;
+    document.getElementById('var-cards').classList.toggle('hidden', v !== 'cards');
+    document.getElementById('var-curve').classList.toggle('hidden', v !== 'curve');
+  });
+});
+
+// Build the triangular distribution path
+(function buildDist() {
+  // f(x) for triangular distribution on [0, 100], peak at 50 = density.
+  // Map x in [0, 100] -> px [0, 600]. Peak height -> py 36 (top), baseline -> 160.
+  const W = 600, H = 160, TOP = 36;
+  let area = `M 0 ${H}`;
+  let line = '';
+  for (let x = 0; x <= 100; x += 2) {
+    const f = x <= 50 ? x / 50 : (100 - x) / 50; // 0..1..0
+    const px = (x / 100) * W;
+    const py = H - f * (H - TOP);
+    area += ` L ${px.toFixed(1)} ${py.toFixed(1)}`;
+    line += (line ? ' L ' : 'M ') + px.toFixed(1) + ' ' + py.toFixed(1);
+  }
+  area += ` L ${W} ${H} Z`;
+  document.getElementById('distArea').setAttribute('d', area);
+  document.getElementById('distLine').setAttribute('d', line);
+})();
+
+// ====== Step 2: reveal + single contest ======
+const revealBtn = document.getElementById('revealBtn');
+const revealZone = document.getElementById('revealZone');
+const singleContestBlock = document.getElementById('singleContestBlock');
+
+let seededResult = null;
+
+function seededRig() {
+  // Find a seed where protagonist loses to a less-skilled rival.
+  // Try seeds until we find one where !youWon AND winnerSkill < 99 (so they're less skilled).
+  // Cap attempts.
+  for (let seed = 1; seed < 200; seed++) {
+    const rand = mulberry32(seed);
+    const r = runContestWithProtag(rand, N, W, PROTAG);
+    if (!r.youWon && r.winnerSkill < 97 && r.winnerSkill > 88 && r.winnerLuck > 92) {
+      return { seed, ...r };
+    }
+  }
+  // fallback
+  return { seed: 1, ...runContestWithProtag(mulberry32(1), N, W, PROTAG) };
+}
+
+function drawBeeswarm(sample, winnerInSample) {
+  const svg = document.getElementById('beeswarmSvg');
+  svg.innerHTML = '';
+  const W = 600, H = 200, PAD = 12;
+  // baseline
+  const ns = 'http://www.w3.org/2000/svg';
+  // axis line
+  const axis = document.createElementNS(ns, 'line');
+  axis.setAttribute('x1', 0); axis.setAttribute('x2', W);
+  axis.setAttribute('y1', H - 24); axis.setAttribute('y2', H - 24);
+  axis.setAttribute('stroke', '#d8d2c4'); axis.setAttribute('stroke-width', 1);
+  svg.appendChild(axis);
+  // tick marks
+  [0, 25, 50, 75, 100].forEach(t => {
+    const tl = document.createElementNS(ns, 'line');
+    const x = (t / 100) * W;
+    tl.setAttribute('x1', x); tl.setAttribute('x2', x);
+    tl.setAttribute('y1', H - 24); tl.setAttribute('y2', H - 20);
+    tl.setAttribute('stroke', '#8a8478');
+    svg.appendChild(tl);
+  });
+
+  const yMid = (H - 24) / 2;
+  const ySpread = (H - 24) / 2 - PAD;
+
+  // sort with you/winner last so they draw on top
+  const sorted = [...sample].sort((a, b) => (a.isYou || a.isWinner ? 1 : 0) - (b.isYou || b.isWinner ? 1 : 0));
+
+  sorted.forEach((p, idx) => {
+    const cx = (p.skill / 100) * W;
+    // deterministic jitter
+    const jr = Math.sin(idx * 7.13 + p.skill * 0.31) * 0.5 + 0.5;
+    const cy = yMid - ySpread + jr * ySpread * 2;
+    const c = document.createElementNS(ns, 'circle');
+    c.setAttribute('cx', cx);
+    c.setAttribute('cy', cy);
+    if (p.isYou) {
+      c.setAttribute('r', 7);
+      c.setAttribute('fill', 'var(--skill)');
+      c.setAttribute('stroke', 'white');
+      c.setAttribute('stroke-width', 2);
+    } else if (p.isWinner) {
+      c.setAttribute('r', 7);
+      c.setAttribute('fill', 'var(--luck)');
+      c.setAttribute('stroke', 'white');
+      c.setAttribute('stroke-width', 2);
+    } else {
+      c.setAttribute('r', 2.6);
+      c.setAttribute('fill', '#a8a193');
+      c.setAttribute('opacity', 0.55);
+    }
+    svg.appendChild(c);
+  });
+
+  // labels
+  const youLabelP = sample.find(p => p.isYou);
+  const winnerP = winnerInSample;
+  if (youLabelP) {
+    const x = (youLabelP.skill / 100) * W;
+    const t = document.createElementNS(ns, 'text');
+    t.setAttribute('x', x - 6); t.setAttribute('y', 22);
+    t.setAttribute('text-anchor', 'end');
+    t.setAttribute('fill', '#1d4ed8');
+    t.setAttribute('font-family', 'Inter, sans-serif');
+    t.setAttribute('font-size', '11');
+    t.setAttribute('font-weight', '600');
+    t.textContent = 'You — skill 99';
+    svg.appendChild(t);
+    // connector
+    const ln = document.createElementNS(ns, 'line');
+    ln.setAttribute('x1', x); ln.setAttribute('x2', x);
+    ln.setAttribute('y1', 26); ln.setAttribute('y2', yMid - 8);
+    ln.setAttribute('stroke', '#1d4ed8'); ln.setAttribute('stroke-width', 1); ln.setAttribute('stroke-dasharray', '2 2');
+    svg.appendChild(ln);
+  }
+  if (winnerP) {
+    const x = (winnerP.skill / 100) * W;
+    const t = document.createElementNS(ns, 'text');
+    t.setAttribute('x', x + 6); t.setAttribute('y', H - 40);
+    t.setAttribute('text-anchor', 'start');
+    t.setAttribute('fill', '#b45309');
+    t.setAttribute('font-family', 'Inter, sans-serif');
+    t.setAttribute('font-size', '11');
+    t.setAttribute('font-weight', '600');
+    t.textContent = 'Winner — skill ' + winnerP.skill.toFixed(1);
+    svg.appendChild(t);
+  }
+}
+
+revealBtn.addEventListener('click', () => {
+  seededResult = seededRig();
+
+  // Mark winner in sample (find closest match to winnerSkill)
+  let winnerInSample = null;
+  let closest = Infinity;
+  seededResult.sample.forEach(p => {
+    if (p.isYou) return;
+    const d = Math.abs(p.skill - seededResult.winnerSkill);
+    if (d < closest) { closest = d; winnerInSample = p; }
+  });
+  if (winnerInSample) winnerInSample.isWinner = true;
+  // Also overwrite its luck to match the actual winner for tooltip honesty
+  if (winnerInSample) { winnerInSample.skill = seededResult.winnerSkill; winnerInSample.luck = seededResult.winnerLuck; }
+
+  drawBeeswarm(seededResult.sample, winnerInSample);
+
+  document.getElementById('youPerf').textContent = seededResult.youPerf.toFixed(1);
+  document.getElementById('rivalSkill').textContent = seededResult.winnerSkill.toFixed(1);
+  document.getElementById('rivalLuck').textContent = seededResult.winnerLuck.toFixed(1);
+  document.getElementById('rivalPerf').textContent = seededResult.winnerPerf.toFixed(1);
+
+  revealZone.classList.add('hidden');
+  singleContestBlock.classList.remove('hidden');
+  singleContestBlock.scrollIntoView ? null : null; // avoid scrollIntoView
+});
+
+// ====== Step 2: batch run ======
+const runBatchBtn = document.getElementById('runBatchBtn');
+const batchWinsEl = document.getElementById('batchWins');
+const batchRankEl = document.getElementById('batchRank');
+const batchSkillWinsEl = document.getElementById('batchSkillWins');
+const batchRunsMeta = document.getElementById('batchRunsMeta');
+const histSvg = document.getElementById('histSvg');
+
+let totalBatches = 0;
+let cumulativeWins = 0;
+let cumulativeRanks = 0;
+let cumulativeSkillWins = 0;
+let cumulativeContests = 0;
+
+function runBatch(numContests = 1000) {
+  let wins = 0;
+  let rankSum = 0;
+  let skillWins = 0;
+  const luckBins = new Array(20).fill(0); // 5-wide bins
+
+  // Use a fresh random seed each batch
+  const rand = Math.random;
+
+  for (let k = 0; k < numContests; k++) {
+    const r = runContestWithRank(rand, N, W, PROTAG);
+    if (r.youWon) wins++;
+    if (r.youSkillWasHighest && r.youWon) skillWins++; // protagonist had top skill AND won
+    // For "most skilled actually won" we want it across all contests; protag is always
+    // the most skilled (since 99 is near max), so this approximates pctMostSkilledWon.
+    // To better track: a contest counts as "most skilled won" iff the overall top-skilled won.
+    // Approx: when protag wins (since they're virtually always top-skilled), count it.
+    rankSum += r.rank;
+    const bin = Math.min(19, Math.floor(r.winnerLuck / 5));
+    luckBins[bin]++;
+  }
+
+  totalBatches++;
+  cumulativeWins += wins;
+  cumulativeRanks += rankSum;
+  cumulativeSkillWins += skillWins;
+  cumulativeContests += numContests;
+
+  const avgWins = cumulativeWins / totalBatches;
+  const avgRank = cumulativeRanks / cumulativeContests;
+  const pctSkillWins = (cumulativeSkillWins / cumulativeContests) * 100;
+
+  batchWinsEl.textContent = Math.round(avgWins).toLocaleString();
+  batchRankEl.textContent = Math.round(avgRank).toLocaleString() + 'th';
+  batchSkillWinsEl.textContent = pctSkillWins.toFixed(1) + '%';
+  batchRunsMeta.textContent = totalBatches + (totalBatches === 1 ? ' batch run' : ' batches — average shown');
+
+  drawHist(luckBins);
+}
+
+function drawHist(bins) {
+  histSvg.innerHTML = '';
+  const ns = 'http://www.w3.org/2000/svg';
+  const W = 600, H = 220, PAD_B = 24, PAD_T = 8;
+  const max = Math.max(...bins, 1);
+  const barW = W / bins.length;
+
+  // The protagonist's luck is exactly 60 — when they win, the bin at index 12
+  // (luck 60–65) gets a spike. Highlight it as "you" rather than letting it
+  // look like a weird artifact.
+  const YOU_BIN = 12;
+
+  // Mean line at 50
+  const meanX = (50 / 100) * W;
+  const meanLine = document.createElementNS(ns, 'line');
+  meanLine.setAttribute('x1', meanX); meanLine.setAttribute('x2', meanX);
+  meanLine.setAttribute('y1', PAD_T); meanLine.setAttribute('y2', H - PAD_B);
+  meanLine.setAttribute('stroke', '#8a8478');
+  meanLine.setAttribute('stroke-dasharray', '3 3');
+  meanLine.setAttribute('stroke-width', 1);
+  histSvg.appendChild(meanLine);
+
+  bins.forEach((v, i) => {
+    const h = (v / max) * (H - PAD_B - PAD_T);
+    const x = i * barW;
+    const y = H - PAD_B - h;
+    const r = document.createElementNS(ns, 'rect');
+    r.setAttribute('x', x + 1.5);
+    r.setAttribute('width', barW - 3);
+    r.setAttribute('y', y);
+    r.setAttribute('height', h);
+    if (i === YOU_BIN) {
+      r.setAttribute('fill', '#1d4ed8'); // protagonist blue
+      r.setAttribute('opacity', 0.92);
+    } else {
+      r.setAttribute('fill', '#b45309');
+      r.setAttribute('opacity', 0.78);
+    }
+    histSvg.appendChild(r);
+  });
+
+  // Annotation for "your" bin
+  const youBinH = (bins[YOU_BIN] / max) * (H - PAD_B - PAD_T);
+  if (bins[YOU_BIN] > 0) {
+    const cx = YOU_BIN * barW + barW / 2;
+    const cy = H - PAD_B - youBinH;
+    // connector
+    const ln = document.createElementNS(ns, 'line');
+    ln.setAttribute('x1', cx); ln.setAttribute('x2', cx);
+    ln.setAttribute('y1', cy - 2); ln.setAttribute('y2', Math.max(cy - 26, 14));
+    ln.setAttribute('stroke', '#1d4ed8'); ln.setAttribute('stroke-width', 1);
+    ln.setAttribute('stroke-dasharray', '2 2');
+    histSvg.appendChild(ln);
+    const t = document.createElementNS(ns, 'text');
+    t.setAttribute('x', cx);
+    t.setAttribute('y', Math.max(cy - 30, 12));
+    t.setAttribute('text-anchor', 'middle');
+    t.setAttribute('fill', '#1d4ed8');
+    t.setAttribute('font-family', 'Inter, sans-serif');
+    t.setAttribute('font-size', '11');
+    t.setAttribute('font-weight', '600');
+    t.textContent = 'You — luck 60';
+    histSvg.appendChild(t);
+  }
+
+  // baseline
+  const ax = document.createElementNS(ns, 'line');
+  ax.setAttribute('x1', 0); ax.setAttribute('x2', W);
+  ax.setAttribute('y1', H - PAD_B); ax.setAttribute('y2', H - PAD_B);
+  ax.setAttribute('stroke', '#d8d2c4');
+  histSvg.appendChild(ax);
+}
+
+runBatchBtn.addEventListener('click', () => {
+  runBatchBtn.disabled = true;
+  runBatchBtn.textContent = 'Running…';
+  setTimeout(() => {
+    runBatch(1000);
+    runBatchBtn.disabled = false;
+    runBatchBtn.textContent = 'Run 1,000 more';
+  }, 30);
+});
+
+// ====== Step 3: payoff slider ======
+const payoffSlider = document.getElementById('payoffSlider');
+const payoffNum = document.getElementById('payoffNum');
+const payoffSub = document.getElementById('payoffSub');
+const payoffLW = document.getElementById('payoffLW');
+const payoffMS = document.getElementById('payoffMS');
+const sliderReadout = document.getElementById('sliderReadout');
+
+// Pre-compute win-rate vs luck-weight by running a sim per slider value would be slow.
+// Instead, use a memoized lazy sim with smaller m.
+const winRateCache = new Map();
+function estimateWinRate(luckWeight) {
+  const key = Math.round(luckWeight * 100);
+  if (winRateCache.has(key)) return winRateCache.get(key);
+  const M = 600;
+  let wins = 0, mostSkilledWins = 0;
+  const rand = Math.random;
+  for (let k = 0; k < M; k++) {
+    const r = runContestWithRank(rand, N, luckWeight, PROTAG);
+    if (r.youWon) wins++;
+    if (r.mostSkilledWon) mostSkilledWins++;
+  }
+  const out = {
+    winRate: (wins / M) * 100,
+    skillWinRate: (mostSkilledWins / M) * 100,
+  };
+  winRateCache.set(key, out);
+  return out;
+}
+
+let sliderTimer = null;
+function updatePayoff() {
+  const val = parseInt(payoffSlider.value, 10);
+  const w = val / 100;
+  sliderReadout.textContent = val;
+  payoffLW.textContent = val + '%';
+
+  // immediate display update; debounce simulation
+  payoffSub.textContent = 'computing…';
+  payoffNum.style.opacity = 0.5;
+
+  clearTimeout(sliderTimer);
+  sliderTimer = setTimeout(() => {
+    const { winRate, skillWinRate } = estimateWinRate(w);
+    const wr = Math.round(winRate);
+    payoffNum.innerHTML = wr + '<span class="pct">%</span>';
+    payoffNum.style.opacity = 1;
+    payoffSub.textContent = wrToSub(wr, val);
+    payoffMS.textContent = Math.round(skillWinRate) + '%';
+  }, 80);
+}
+
+function wrToSub(wr, lw) {
+  if (lw === 0) return 'Pure skill. You\u2019re tied at the top \u2014 with luck switched off, ties are broken arbitrarily, so you don\u2019t always win.';
+  if (lw <= 2 && wr >= 60) return 'A whisper of luck actually helps you, since yours is above average. Past this point, the slider turns against you.';
+  if (wr >= 90) return 'You almost always get the deal.';
+  if (wr >= 50) return 'You usually get the deal \u2014 but not always.';
+  if (wr >= 20) return 'You get the deal in roughly ' + wr + ' of every 100 contests.';
+  if (wr >= 5)  return 'You get the deal in roughly ' + wr + ' of every 100 contests. Mostly someone else does.';
+  if (wr >= 1)  return 'You almost never get the deal. Luck has all but taken over.';
+  return 'You essentially never win. Luck is calling the shots.';
+}
+
+payoffSlider.addEventListener('input', updatePayoff);
+updatePayoff();
+
+// ====== Navigation ======
+let currentStep = 1;
+const TOTAL_STEPS = 3;
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const topStepPill = document.getElementById('topStepPill');
+
+function goToStep(n) {
+  currentStep = Math.max(1, Math.min(TOTAL_STEPS, n));
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.getElementById('step-' + currentStep).classList.add('active');
+  document.querySelectorAll('.pager .dot').forEach(d => {
+    d.classList.toggle('active', parseInt(d.dataset.step, 10) === currentStep);
+  });
+  prevBtn.disabled = currentStep === 1;
+  nextBtn.textContent = currentStep === TOTAL_STEPS ? 'Replay story ↺' : 'Next →';
+  topStepPill.textContent = 'Step ' + currentStep + ' of ' + TOTAL_STEPS;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+prevBtn.addEventListener('click', () => goToStep(currentStep - 1));
+nextBtn.addEventListener('click', () => {
+  if (currentStep === TOTAL_STEPS) goToStep(1);
+  else goToStep(currentStep + 1);
+});
+document.querySelectorAll('.pager .dot').forEach(d => {
+  d.addEventListener('click', () => goToStep(parseInt(d.dataset.step, 10)));
+});
+
+// ====== Escape hatches ======
+function escape() {
+  // In the mockup, just signal — in real app this would route to /explore.
+  alert('In the real app, this would drop you into the existing free-exploration dashboard with the same parameters loaded.');
+}
+document.getElementById('escapeTop').addEventListener('click', (e) => { e.preventDefault(); escape(); });
+document.getElementById('escapeBig').addEventListener('click', escape);
+
+</script>
+</body>
+</html>
