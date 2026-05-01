@@ -83,7 +83,7 @@ export default function Narrative() {
       </header>
 
       {/* Stage */}
-      <main className="narrative-stage" style={{ maxWidth: 880, margin: '0 auto', padding: '80px 28px 120px', minHeight: '78vh' }}>
+      <main className="narrative-stage" style={{ maxWidth: 880, margin: '0 auto', padding: '80px 28px 60px' }}>
         <div key={step} className="animate-fade-up">
           {step === 1 && <NarrativeStep1 />}
           {step === 2 && <NarrativeStep2 />}
@@ -93,11 +93,11 @@ export default function Narrative() {
 
       {/* Bottom nav */}
       <nav
-        className="flex items-center justify-between"
+        className="flex items-center justify-between narrative-nav"
         style={{
           maxWidth: 880,
-          margin: '56px auto 0',
-          padding: '28px 28px 80px',
+          margin: '32px auto 0',
+          padding: '28px 28px 40px',
           borderTop: '1px solid var(--rule)',
         }}
       >

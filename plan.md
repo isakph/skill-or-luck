@@ -175,7 +175,9 @@ Validate by running the simulation — the protagonist should rank top 1% notice
 
 ### Phase 7: Hosting on Vercel
 
-Sticking with the original plan: Vercel. For a client-side-only Next.js app, it's the path of least resistance — zero config, push-to-deploy, free tier covers this easily, built by the Next.js team so no framework surprises. Alternatives (Netlify, Cloudflare Pages) are fine but not meaningfully better for this case.
+Sticking with Vercel. For a client-side-only Next.js app, it's the path of least resistance — zero config, push-to-deploy, free tier covers this easily, built by the Next.js team so no framework surprises. Alternatives (Netlify, Cloudflare Pages) are fine but not meaningfully better for this case.
+
+The domain plan: host the simulation as a subdomain (e.g. `luck.mydomain.com`) of the existing personal domain registered at Domeneshop. No need to buy a new TLD or transfer the existing one — Domeneshop's DNS panel supports CNAME records on subdomains, which is all Vercel needs.
 
 **Prereqs:**
 - Code is in a GitHub repo
@@ -191,18 +193,29 @@ Sticking with the original plan: Vercel. For a client-side-only Next.js app, it'
    - Vercel auto-detects Next.js — framework preset, build command (`next build`), output directory are all pre-filled. Leave them alone.
    - Click **Deploy**. First build takes 1–2 minutes.
 
-3. **Pick a nicer URL.** Two options:
-   - *Free Vercel subdomain:* Project → Settings → Domains. Claim any free `*.vercel.app` name, e.g. `skill-and-luck.vercel.app` or `successandluck.vercel.app`.
-   - *Custom domain (~$10–15/yr):* Buy from Namecheap, Porkbun, or Cloudflare Registrar. In Vercel: Settings → Domains → Add. Vercel displays the DNS records (A + CNAME) to create at the registrar. HTTPS is automatic. A subdomain on an existing personal site (e.g. `luck.yourdomain.com`) is a nice middle ground.
+3. **Attach a subdomain of the personal domain.**
+   - In Vercel: Project → **Settings → Domains** → add `luck.mydomain.com` (substitute the real personal domain). Vercel will show you the DNS record it expects: typically a CNAME pointing the subdomain to `cname.vercel-dns.com`.
+   - In Domeneshop: log in at [domeneshop.no/admin](https://domeneshop.no/admin) → **Mine domener** → click the personal domain → **DNS**. Add a new record:
+     - Type: `CNAME`
+     - Name/subdomain: `luck` (only the subdomain part, not the full host)
+     - Target: `cname.vercel-dns.com.` (with the trailing dot if the panel requires it)
+     - TTL: leave at the default (e.g. 1 hour)
+   - Save. DNS propagation usually takes minutes; up to a few hours in rare cases. Vercel auto-issues an HTTPS certificate via Let's Encrypt — no manual cert work.
+   - This assumes the domain is still using Domeneshop's default nameservers. If at some point the nameservers were delegated elsewhere (e.g. Cloudflare for free DNS hosting), edit DNS there instead.
 
 4. **Push-to-deploy is on by default.** Every push to `main` triggers a production deploy. Every push to another branch creates a preview deployment with its own URL — handy for sharing WIP.
+
+**Alternatives if the personal domain isn't ready:**
+- *Free Vercel subdomain:* Project → Settings → Domains → claim any `*.vercel.app` name (e.g. `successandluck.vercel.app`). Perfectly fine for early sharing; can swap to the personal subdomain later without losing the Vercel URL.
+- *New custom TLD (~$10–15/yr):* only worth it if the project outgrows being a side experiment and wants its own brand. For now, the subdomain route is cheaper and equally professional-looking.
 
 **Gotchas:**
 - Free tier has a build-minute limit; a personal project won't come close.
 - If server-side code is added later (API routes, server actions), those run as serverless functions — still free within the tier.
 - Environment variables live in Project → Settings → Environment Variables. None needed yet, but if analytics/telemetry keys get added, put them there — never commit them.
+- Domeneshop's UI is in Norwegian; CNAME is also called "CNAME" there, but the surrounding labels (e.g. "Pek til", "Vert") are translated. Match by field shape, not label.
 
-**Done when:** the site is live at a chosen URL, push-to-main redeploys automatically, and the URL is shareable with non-technical users.
+**Done when:** the site is live at `luck.mydomain.com` (or chosen subdomain), push-to-main redeploys automatically, and the URL is shareable with non-technical users.
 
 ## Design notes
 

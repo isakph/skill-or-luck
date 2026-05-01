@@ -177,6 +177,7 @@ export default function NarrativeStep1() {
                 {stat.label}
               </span>
               <span
+                className="narrative-stat-num"
                 style={{
                   fontFamily: 'var(--font-serif)',
                   fontSize: 64,
@@ -189,7 +190,7 @@ export default function NarrativeStep1() {
               >
                 {stat.value}
               </span>
-              <span style={{ fontFamily: 'var(--font-sans)', fontSize: 12, color: 'var(--ink-3)', marginTop: 4 }}>
+              <span className="narrative-stat-foot" style={{ fontFamily: 'var(--font-sans)', fontSize: 12, color: 'var(--ink-3)', marginTop: 4 }}>
                 {stat.foot}
               </span>
             </div>

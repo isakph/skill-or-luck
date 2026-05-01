@@ -98,10 +98,27 @@ input[type="range"].big-slider::-moz-range-thumb {
 
 /* --- Mobile responsive --- */
 @media (max-width: 640px) {
-  .narrative-grid-3 { grid-template-columns: 1fr !important; }
+  body { font-size: 16px !important; }
+  .narrative-stage { padding: 56px 20px 40px !important; }
+  .narrative-stage p { font-size: 16px !important; }
+  .narrative-stage blockquote { font-size: 19px !important; }
+  .narrative-topbar-inner { padding: 12px 20px !important; }
+  .narrative-grid-3 {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+  .narrative-grid-3 > div {
+    padding: 16px 10px 14px !important;
+  }
+  .narrative-grid-3 .narrative-stat-num {
+    font-size: 36px !important;
+  }
+  .narrative-grid-3 .narrative-stat-foot {
+    font-size: 10px !important;
+  }
   .narrative-grid-2 { grid-template-columns: 1fr !important; }
   .narrative-grid-batch { grid-template-columns: 1fr !important; }
-  .narrative-stage { padding: 56px 20px 80px !important; }
-  .narrative-topbar-inner { padding: 12px 20px !important; }
-  .narrative-stat-num { font-size: 48px !important; }
+  .narrative-nav {
+    margin-top: 24px !important;
+    padding: 20px 20px 32px !important;
+  }
 }
