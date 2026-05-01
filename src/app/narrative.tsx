@@ -20,61 +20,28 @@ export default function Narrative() {
     <>
       {/* Top bar */}
       <header
-        className="sticky top-0 z-50 border-b"
+        className="sticky top-0 z-50 border-b border-[var(--rule)]"
         style={{
           background: 'color-mix(in oklch, var(--bg) 88%, transparent)',
           backdropFilter: 'saturate(140%) blur(12px)',
           WebkitBackdropFilter: 'saturate(140%) blur(12px)',
-          borderColor: 'var(--rule)',
         }}
       >
-        <div
-          className="mx-auto flex items-center justify-between gap-4 narrative-topbar-inner"
-          style={{ maxWidth: 1100, padding: '14px 28px' }}
-        >
-          <div
-            className="flex items-baseline gap-2.5"
-            style={{ fontFamily: 'var(--font-serif)', fontSize: 14, letterSpacing: '0.02em', color: 'var(--ink-2)' }}
-          >
-            <span
-              className="inline-block rounded-full"
-              style={{ width: 8, height: 8, background: 'var(--ink)', transform: 'translateY(-1px)' }}
-            />
+        <div className="mx-auto flex max-w-[1100px] flex-col gap-2 px-5 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-7 sm:py-3.5">
+          <div className="flex items-baseline gap-2.5 font-serif text-sm leading-tight tracking-normal text-[var(--ink-2)]">
+            <span className="inline-block h-2 w-2 shrink-0 translate-y-[-1px] rounded-full bg-[var(--ink)]" />
             <span>
-              <strong style={{ color: 'var(--ink)', fontWeight: 600, letterSpacing: 0 }}>Skill or Luck</strong>
+              <strong className="font-semibold tracking-normal text-[var(--ink)]">Skill or Luck</strong>
               &nbsp;&middot;&nbsp;a short story in three parts
             </span>
           </div>
-          <div className="flex items-center gap-4" style={{ fontFamily: 'var(--font-sans)' }}>
-            <span
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: 11,
-                letterSpacing: '0.08em',
-                textTransform: 'uppercase',
-                color: 'var(--ink-3)',
-              }}
-            >
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 font-sans">
+            <span className="font-mono text-[11px] uppercase tracking-normal text-[var(--ink-3)]">
               Step {step} of {TOTAL_STEPS}
             </span>
             <Link
               href="/explore"
-              className="no-underline transition-colors"
-              style={{
-                fontFamily: 'var(--font-sans)',
-                fontSize: 13,
-                color: 'var(--ink-2)',
-                borderBottom: '1px solid var(--rule)',
-                paddingBottom: 1,
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = 'var(--ink)'
-                e.currentTarget.style.borderBottomColor = 'var(--ink)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = 'var(--ink-2)'
-                e.currentTarget.style.borderBottomColor = 'var(--rule)'
-              }}
+              className="border-b border-[var(--rule)] pb-px text-[13px] text-[var(--ink-2)] no-underline transition-colors hover:border-[var(--ink)] hover:text-[var(--ink)]"
             >
               Skip to free exploration &rarr;
             </Link>
@@ -83,7 +50,7 @@ export default function Narrative() {
       </header>
 
       {/* Stage */}
-      <main className="narrative-stage" style={{ maxWidth: 880, margin: '0 auto', padding: '80px 28px 60px' }}>
+      <main className="mx-auto w-full max-w-[880px] px-5 pb-8 pt-12 sm:px-7 sm:pb-12 sm:pt-20">
         <div key={step} className="animate-fade-up">
           {step === 1 && <NarrativeStep1 />}
           {step === 2 && <NarrativeStep2 />}
@@ -92,30 +59,15 @@ export default function Narrative() {
       </main>
 
       {/* Bottom nav */}
-      <nav
-        className="flex items-center justify-between narrative-nav"
-        style={{
-          maxWidth: 880,
-          margin: '32px auto 0',
-          padding: '28px 28px 40px',
-          borderTop: '1px solid var(--rule)',
-        }}
-      >
+      <nav className="mx-auto mt-6 grid w-full max-w-[880px] grid-cols-[1fr_auto_1fr] items-center gap-2 border-t border-[var(--rule)] px-5 py-6 sm:mt-8 sm:gap-4 sm:px-7 sm:pb-10 sm:pt-7">
         <button
           disabled={step === 1}
           onClick={() => goToStep(step - 1)}
-          style={{
-            fontFamily: 'var(--font-sans)',
-            fontSize: 14,
-            fontWeight: 500,
-            background: 'transparent',
-            color: step === 1 ? 'var(--ink-3)' : 'var(--ink)',
-            border: `1px solid ${step === 1 ? 'var(--rule)' : 'var(--ink)'}`,
-            padding: '12px 22px',
-            borderRadius: 4,
-            cursor: step === 1 ? 'default' : 'pointer',
-            opacity: step === 1 ? 0.5 : 1,
-          }}
+          className={`justify-self-start rounded border px-3 py-2.5 font-sans text-xs font-medium transition-colors disabled:cursor-default disabled:opacity-50 sm:px-[22px] sm:py-3 sm:text-sm ${
+            step === 1
+              ? 'border-[var(--rule)] text-[var(--ink-3)]'
+              : 'cursor-pointer border-[var(--ink)] text-[var(--ink)] hover:bg-[var(--bg-2)]'
+          }`}
         >
           &larr; Previous
         </button>
@@ -126,15 +78,10 @@ export default function Narrative() {
               key={s}
               onClick={() => goToStep(s)}
               aria-label={`Go to step ${s}`}
-              style={{
-                width: s === step ? 44 : 28,
-                height: 4,
-                background: s === step ? 'var(--ink)' : 'var(--rule)',
-                borderRadius: 999,
-                border: 0,
-                cursor: 'pointer',
-                transition: 'background 0.2s, width 0.2s',
-              }}
+              aria-current={s === step ? 'step' : undefined}
+              className={`h-1 cursor-pointer rounded-full border-0 transition-[background,width] ${
+                s === step ? 'w-9 bg-[var(--ink)] sm:w-11' : 'w-6 bg-[var(--rule)] sm:w-7'
+              }`}
             />
           ))}
         </div>
@@ -144,17 +91,7 @@ export default function Narrative() {
             if (step === TOTAL_STEPS) goToStep(1)
             else goToStep(step + 1)
           }}
-          style={{
-            fontFamily: 'var(--font-sans)',
-            fontSize: 14,
-            fontWeight: 500,
-            background: 'var(--ink)',
-            color: 'var(--bg)',
-            border: 0,
-            padding: '12px 22px',
-            borderRadius: 4,
-            cursor: 'pointer',
-          }}
+          className="justify-self-end rounded bg-[var(--ink)] px-3 py-2.5 font-sans text-xs font-medium text-[var(--bg)] transition-colors hover:bg-[var(--ink-2)] sm:px-[22px] sm:py-3 sm:text-sm"
         >
           {step === TOTAL_STEPS ? 'Replay story \u21BA' : 'Next \u2192'}
         </button>

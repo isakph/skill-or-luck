@@ -2,12 +2,19 @@
 
 import { useState, useCallback } from 'react'
 import {
-  mulberry32,
   findDramaticSeed,
-  runContestWithProtag,
   runBatchWithProtag,
 } from '@/lib/simulation'
 import type { FixedContestant, ProtagContestResult, ProtagBatchResult, ProtagSample } from '@/lib/types'
+import {
+  finePrintClass,
+  ledeClass,
+  monoCapsClass,
+  primaryButtonClass,
+  stepDotClass,
+  stepMetaClass,
+  stepTitleClass,
+} from './narrativeStyles'
 
 const PROTAG: FixedContestant = { ability: 99, effort: 99, luck: 60 }
 const N = 2000
@@ -57,85 +64,30 @@ export default function NarrativeStep2() {
   return (
     <section>
       {/* Step meta */}
-      <div
-        className="flex items-center gap-3.5"
-        style={{
-          fontFamily: 'var(--font-mono)',
-          fontSize: 11,
-          letterSpacing: '0.12em',
-          textTransform: 'uppercase',
-          color: 'var(--ink-3)',
-          marginBottom: 28,
-        }}
-      >
-        <span style={{ color: 'var(--ink)' }}>02</span>
-        <span className="rounded-full" style={{ width: 4, height: 4, background: 'var(--ink-3)' }} />
+      <div className={stepMetaClass}>
+        <span className="text-[var(--ink)]">02</span>
+        <span className={stepDotClass} />
         <span>Watch them lose</span>
       </div>
 
-      <h1
-        style={{
-          fontFamily: 'var(--font-serif)',
-          fontWeight: 400,
-          fontSize: 'clamp(36px, 5.2vw, 60px)',
-          lineHeight: 1.05,
-          letterSpacing: '-0.015em',
-          margin: '0 0 24px',
-          textWrap: 'balance',
-        }}
-      >
-        The deal goes to <em style={{ fontStyle: 'italic' }}>someone else</em>.
+      <h1 className={stepTitleClass}>
+        The deal goes to <em className="italic">someone else</em>.
       </h1>
 
-      <p
-        style={{
-          fontFamily: 'var(--font-serif)',
-          fontSize: 'clamp(19px, 1.7vw, 22px)',
-          lineHeight: 1.55,
-          color: 'var(--ink-2)',
-          maxWidth: '36em',
-          margin: '0 0 36px',
-        }}
-      >
+      <p className={ledeClass}>
         Here&apos;s what happens this year. Two thousand musicians, one record deal,
         ninety-percent skill, ten-percent luck. Reveal the result.
       </p>
 
       {/* Reveal curtain */}
       {!revealed && (
-        <div
-          style={{
-            border: '1px dashed var(--rule)',
-            background: 'var(--bg-2)',
-            padding: '48px 28px',
-            textAlign: 'center',
-            margin: '36px 0',
-          }}
-        >
-          <p
-            style={{
-              fontFamily: 'var(--font-serif)',
-              fontStyle: 'italic',
-              color: 'var(--ink-3)',
-              margin: '0 0 18px',
-              fontSize: 17,
-            }}
-          >
+        <div className="my-8 border border-dashed border-[var(--rule)] bg-[var(--bg-2)] px-5 py-8 text-center sm:my-9 sm:px-7 sm:py-12">
+          <p className="mb-5 font-serif text-[16px] italic text-[var(--ink-3)] sm:text-[17px]">
             One contest. Seeded once. The result is already determined.
           </p>
           <button
             onClick={handleReveal}
-            style={{
-              fontFamily: 'var(--font-sans)',
-              fontSize: 16,
-              fontWeight: 500,
-              background: 'var(--ink)',
-              color: 'var(--bg)',
-              border: 0,
-              padding: '16px 28px',
-              borderRadius: 4,
-              cursor: 'pointer',
-            }}
+            className={`${primaryButtonClass} px-6 py-4 text-base sm:px-7`}
           >
             Reveal who won
           </button>
@@ -146,47 +98,19 @@ export default function NarrativeStep2() {
       {revealed && seededResult && (
         <div>
           {/* Contest card */}
-          <div
-            style={{
-              background: 'var(--bg)',
-              border: '1px solid var(--rule)',
-              padding: 28,
-              margin: '36px 0 24px',
-            }}
-          >
-            <div
-              className="flex items-baseline justify-between gap-4"
-              style={{ marginBottom: 20 }}
-            >
-              <h3
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: 11,
-                  letterSpacing: '0.14em',
-                  textTransform: 'uppercase',
-                  color: 'var(--ink-3)',
-                  margin: 0,
-                  fontWeight: 500,
-                }}
-              >
+          <div className="my-8 border border-[var(--rule)] bg-[var(--bg)] p-4 sm:my-9 sm:p-7">
+            <div className="mb-5 flex flex-col gap-1.5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
+              <h3 className="font-mono text-[11px] font-medium uppercase tracking-normal text-[var(--ink-3)]">
                 One contest &middot; 2,000 contestants &middot; 10% luck
               </h3>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-3)' }}>
+              <span className="font-mono text-[11px] text-[var(--ink-3)]">
                 seed: {seededResult.seed}
               </span>
             </div>
 
             {/* Beeswarm */}
             <BeeswarmSvg sample={seededResult.sample} />
-            <div
-              className="flex justify-between"
-              style={{
-                fontFamily: 'var(--font-sans)',
-                fontSize: 11,
-                color: 'var(--ink-3)',
-                marginTop: 4,
-              }}
-            >
+            <div className="mt-1 flex justify-between font-sans text-[11px] text-[var(--ink-3)]">
               <span>Skill 0</span>
               <span>50</span>
               <span>100</span>
@@ -194,153 +118,88 @@ export default function NarrativeStep2() {
 
             {/* Result comparison */}
             <div
-              className="grid narrative-grid-2"
-              style={{
-                gridTemplateColumns: '1fr 1fr',
-                gap: 1,
-                background: 'var(--rule)',
-                marginTop: 20,
-                border: '1px solid var(--rule)',
-              }}
+              className="mt-5 grid grid-cols-1 gap-px border border-[var(--rule)] bg-[var(--rule)] sm:grid-cols-2"
             >
-              <div style={{ background: 'var(--bg)', padding: '18px 20px', borderLeft: '3px solid var(--skill)' }}>
-                <div
-                  style={{
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: 10,
-                    letterSpacing: '0.12em',
-                    textTransform: 'uppercase',
-                    color: 'var(--ink-3)',
-                    marginBottom: 4,
-                  }}
-                >
+              <div className="border-l-[3px] border-l-[color:var(--skill)] bg-[var(--bg)] p-4 sm:px-5 sm:py-[18px]">
+                <div className={`${monoCapsClass} mb-1`}>
                   You &mdash; most skilled
                 </div>
-                <div style={{ fontFamily: 'var(--font-serif)', fontSize: 18, fontWeight: 500, marginBottom: 8 }}>
+                <div className="mb-2 font-serif text-lg font-medium">
                   Top of the field
                 </div>
-                <div
-                  className="flex flex-wrap gap-3.5"
-                  style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--ink-2)' }}
-                >
-                  <span>skill <b style={{ color: 'var(--ink)', fontWeight: 500 }}>99.0</b></span>
-                  <span>luck <b style={{ color: 'var(--ink)', fontWeight: 500 }}>60.0</b></span>
+                <div className="flex flex-wrap gap-3.5 font-mono text-xs text-[var(--ink-2)]">
+                  <span>skill <b className="font-medium text-[var(--ink)]">99.0</b></span>
+                  <span>luck <b className="font-medium text-[var(--ink)]">60.0</b></span>
                   <span>
                     performance{' '}
-                    <b style={{ color: 'var(--ink)', fontWeight: 500 }}>{seededResult.youPerf.toFixed(1)}</b>
+                    <b className="font-medium text-[var(--ink)]">{seededResult.youPerf.toFixed(1)}</b>
                   </span>
                 </div>
               </div>
-              <div style={{ background: 'var(--bg)', padding: '18px 20px', borderLeft: '3px solid var(--luck)' }}>
-                <div
-                  style={{
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: 10,
-                    letterSpacing: '0.12em',
-                    textTransform: 'uppercase',
-                    color: 'var(--ink-3)',
-                    marginBottom: 4,
-                  }}
-                >
+              <div className="border-l-[3px] border-l-[color:var(--luck)] bg-[var(--bg)] p-4 sm:px-5 sm:py-[18px]">
+                <div className={`${monoCapsClass} mb-1`}>
                   Winner &mdash; luckier
                 </div>
-                <div style={{ fontFamily: 'var(--font-serif)', fontSize: 18, fontWeight: 500, marginBottom: 8 }}>
+                <div className="mb-2 font-serif text-lg font-medium">
                   Some other musician
                 </div>
-                <div
-                  className="flex flex-wrap gap-3.5"
-                  style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--ink-2)' }}
-                >
+                <div className="flex flex-wrap gap-3.5 font-mono text-xs text-[var(--ink-2)]">
                   <span>
                     skill{' '}
-                    <b style={{ color: 'var(--ink)', fontWeight: 500 }}>{seededResult.winnerSkill.toFixed(1)}</b>
+                    <b className="font-medium text-[var(--ink)]">{seededResult.winnerSkill.toFixed(1)}</b>
                   </span>
                   <span>
                     luck{' '}
-                    <b style={{ color: 'var(--ink)', fontWeight: 500 }}>{seededResult.winnerLuck.toFixed(1)}</b>
+                    <b className="font-medium text-[var(--ink)]">{seededResult.winnerLuck.toFixed(1)}</b>
                   </span>
                   <span>
                     performance{' '}
-                    <b style={{ color: 'var(--ink)', fontWeight: 500 }}>{seededResult.winnerPerf.toFixed(1)}</b>
+                    <b className="font-medium text-[var(--ink)]">{seededResult.winnerPerf.toFixed(1)}</b>
                   </span>
                 </div>
               </div>
             </div>
 
-            <p
-              style={{
-                fontFamily: 'var(--font-sans)',
-                fontSize: 12,
-                color: 'var(--ink-3)',
-                marginTop: 12,
-                maxWidth: '36em',
-              }}
-            >
+            <p className={`${finePrintClass} mt-3`}>
               They were {(99 - seededResult.winnerSkill).toFixed(1)} points less skilled than you.
               They got luckier on the day. Under the rules of this game, that&apos;s enough.
             </p>
           </div>
 
           {/* Batch block */}
-          <div style={{ marginTop: 12, borderTop: '1px solid var(--rule)', paddingTop: 36 }}>
-            <div
-              className="flex justify-between items-baseline flex-wrap gap-4"
-              style={{ marginBottom: 24 }}
-            >
-              <h3
-                style={{
-                  fontFamily: 'var(--font-serif)',
-                  fontSize: 26,
-                  fontWeight: 500,
-                  margin: 0,
-                  letterSpacing: '-0.01em',
-                }}
-              >
+          <div className="mt-3 border-t border-[var(--rule)] pt-8 sm:pt-9">
+            <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-baseline sm:justify-between">
+              <h3 className="font-serif text-[22px] font-medium leading-tight tracking-normal sm:text-[26px]">
                 Maybe this year was a fluke. Run a thousand more.
               </h3>
-              <div className="flex items-center gap-2.5" style={{ fontFamily: 'var(--font-sans)', fontSize: 13, color: 'var(--ink-3)' }}>
+              <div className="flex flex-col items-start gap-2 font-sans text-[13px] text-[var(--ink-3)] sm:flex-row sm:items-center sm:gap-2.5">
                 <button
                   disabled={isRunningBatch}
                   onClick={handleRunBatch}
-                  style={{
-                    fontFamily: 'var(--font-sans)',
-                    fontSize: 14,
-                    fontWeight: 500,
-                    background: 'var(--ink)',
-                    color: 'var(--bg)',
-                    border: 0,
-                    padding: '12px 22px',
-                    borderRadius: 4,
-                    cursor: isRunningBatch ? 'default' : 'pointer',
-                    opacity: isRunningBatch ? 0.6 : 1,
-                  }}
+                  className={primaryButtonClass}
                 >
                   {isRunningBatch ? 'Running\u2026' : batchCount === 0 ? 'Run 1,000 contests' : 'Run 1,000 more'}
                 </button>
-                <span>{batchCount === 0 ? 'with the same parameters' : ''}</span>
+                {batchCount === 0 && <span>with the same parameters</span>}
               </div>
             </div>
 
             {/* Batch summary */}
             <div
-              className="grid narrative-grid-batch"
-              style={{
-                gridTemplateColumns: '1.2fr 1fr 1fr',
-                gap: 1,
-                background: 'var(--rule)',
-                border: '1px solid var(--rule)',
-                marginBottom: 24,
-              }}
+              className="mb-6 grid grid-cols-1 gap-px border border-[var(--rule)] bg-[var(--rule)] sm:grid-cols-[1.2fr_1fr_1fr]"
             >
-              <div style={{ background: 'var(--bg)', padding: '22px' }}>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-3)', marginBottom: 10 }}>
+              <div className="bg-[var(--bg)] p-5 sm:p-[22px]">
+                <div className={`${monoCapsClass} mb-2.5`}>
                   You won the deal
                 </div>
-                <div style={{ fontFamily: 'var(--font-serif)', fontSize: 56, lineHeight: 1, fontWeight: 400, letterSpacing: '-0.02em', fontFeatureSettings: '"lnum", "tnum"' }}>
+                <div
+                  className="font-serif text-[42px] font-normal leading-none tracking-normal sm:text-[56px]"
+                  style={{ fontFeatureSettings: '"lnum", "tnum"' }}
+                >
                   {avgWins !== null ? avgWins.toLocaleString() : '\u2014'}{' '}
-                  <span style={{ fontSize: 22, color: 'var(--ink-3)', fontStyle: 'italic' }}>/ 1,000</span>
+                  <span className="text-[18px] italic text-[var(--ink-3)] sm:text-[22px]">/ 1,000</span>
                 </div>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-3)', marginTop: 4 }}>
+                <div className="mt-1 font-mono text-[11px] text-[var(--ink-3)]">
                   {batchCount === 0
                     ? 'no batches yet'
                     : batchCount === 1
@@ -348,25 +207,31 @@ export default function NarrativeStep2() {
                     : `${batchCount} batches \u2014 average shown`}
                 </div>
               </div>
-              <div style={{ background: 'var(--bg)', padding: '22px' }}>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-3)', marginBottom: 10 }}>
+              <div className="bg-[var(--bg)] p-5 sm:p-[22px]">
+                <div className={`${monoCapsClass} mb-2.5`}>
                   Your average finish
                 </div>
-                <div style={{ fontFamily: 'var(--font-serif)', fontSize: 32, lineHeight: 1, fontWeight: 400, letterSpacing: '-0.01em', fontFeatureSettings: '"lnum", "tnum"' }}>
+                <div
+                  className="font-serif text-[30px] font-normal leading-none tracking-normal sm:text-[32px]"
+                  style={{ fontFeatureSettings: '"lnum", "tnum"' }}
+                >
                   {avgRank !== null ? `${avgRank.toLocaleString()}th` : '\u2014'}
                 </div>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-3)', marginTop: 4 }}>
+                <div className="mt-1 font-mono text-[11px] text-[var(--ink-3)]">
                   out of 2,000
                 </div>
               </div>
-              <div style={{ background: 'var(--bg)', padding: '22px' }}>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-3)', marginBottom: 10 }}>
+              <div className="bg-[var(--bg)] p-5 sm:p-[22px]">
+                <div className={`${monoCapsClass} mb-2.5`}>
                   Most skilled actually won
                 </div>
-                <div style={{ fontFamily: 'var(--font-serif)', fontSize: 32, lineHeight: 1, fontWeight: 400, letterSpacing: '-0.01em', fontFeatureSettings: '"lnum", "tnum"' }}>
+                <div
+                  className="font-serif text-[30px] font-normal leading-none tracking-normal sm:text-[32px]"
+                  style={{ fontFeatureSettings: '"lnum", "tnum"' }}
+                >
                   {pctSkillWins !== null ? `${pctSkillWins}%` : '\u2014'}
                 </div>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-3)', marginTop: 4 }}>
+                <div className="mt-1 font-mono text-[11px] text-[var(--ink-3)]">
                   % of contests
                 </div>
               </div>
@@ -374,25 +239,15 @@ export default function NarrativeStep2() {
 
             {/* Histogram */}
             {batchResults && (
-              <div
-                style={{
-                  background: 'var(--bg)',
-                  border: '1px solid var(--rule)',
-                  padding: '24px 28px 18px',
-                  marginBottom: 12,
-                }}
-              >
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-3)', marginBottom: 14 }}>
+              <div className="mb-3 border border-[var(--rule)] bg-[var(--bg)] p-4 pb-3 sm:px-7 sm:pb-[18px] sm:pt-6">
+                <div className={`${monoCapsClass} mb-3.5`}>
                   How lucky was the winner &mdash; across 1,000 contests{' '}
-                  <span style={{ color: 'var(--skill)', fontWeight: 500, textTransform: 'none', letterSpacing: 0 }}>
+                  <span className="font-medium normal-case tracking-normal text-[var(--skill)]">
                     &middot; blue bar = contests you won (your luck is fixed at 60)
                   </span>
                 </div>
                 <HistogramSvg bins={batchResults.winnerLuckBins} />
-                <div
-                  className="flex justify-between"
-                  style={{ fontFamily: 'var(--font-sans)', fontSize: 12, color: 'var(--ink-3)', marginTop: 6 }}
-                >
+                <div className="mt-1.5 flex justify-between font-sans text-xs text-[var(--ink-3)]">
                   <span>luck = 0</span>
                   <span>50 (average)</span>
                   <span>100</span>
@@ -400,15 +255,7 @@ export default function NarrativeStep2() {
               </div>
             )}
 
-            <p
-              style={{
-                fontFamily: 'var(--font-sans)',
-                fontSize: 12,
-                color: 'var(--ink-3)',
-                marginTop: 12,
-                maxWidth: '36em',
-              }}
-            >
+            <p className={`${finePrintClass} mt-3`}>
               Run it. Run it again. The numbers wobble a little, but the story doesn&apos;t.
               You almost never get the deal &mdash; even though you&apos;re objectively the best in the field.
             </p>
@@ -442,7 +289,7 @@ function BeeswarmSvg({ sample }: { sample: ProtagSample[] }) {
     <svg
       viewBox={`0 0 ${SVG_W} ${SVG_H}`}
       preserveAspectRatio="none"
-      style={{ width: '100%', height: 200, display: 'block' }}
+      className="block h-36 w-full sm:h-[200px]"
     >
       {/* Axis */}
       <line x1="0" x2={SVG_W} y1={SVG_H - 24} y2={SVG_H - 24} stroke="var(--rule)" strokeWidth="1" />
@@ -530,7 +377,7 @@ function HistogramSvg({ bins }: { bins: number[] }) {
     <svg
       viewBox={`0 0 ${SVG_W} ${SVG_H}`}
       preserveAspectRatio="none"
-      style={{ width: '100%', height: 220, display: 'block' }}
+      className="block h-40 w-full sm:h-[220px]"
     >
       {/* Mean line */}
       <line

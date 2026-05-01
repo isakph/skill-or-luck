@@ -4,6 +4,14 @@ import { useState, useRef, useCallback, useEffect } from 'react'
 import Link from 'next/link'
 import { estimateWinRate } from '@/lib/simulation'
 import type { FixedContestant } from '@/lib/types'
+import {
+  bodyCopyClass,
+  ledeClass,
+  quoteClass,
+  stepDotClass,
+  stepMetaClass,
+  stepTitleClass,
+} from './narrativeStyles'
 
 const PROTAG: FixedContestant = { ability: 99, effort: 99, luck: 60 }
 const N = 2000
@@ -50,134 +58,70 @@ export default function NarrativeStep3() {
   return (
     <section>
       {/* Step meta */}
-      <div
-        className="flex items-center gap-3.5"
-        style={{
-          fontFamily: 'var(--font-mono)',
-          fontSize: 11,
-          letterSpacing: '0.12em',
-          textTransform: 'uppercase',
-          color: 'var(--ink-3)',
-          marginBottom: 28,
-        }}
-      >
-        <span style={{ color: 'var(--ink)' }}>03</span>
-        <span className="rounded-full" style={{ width: 4, height: 4, background: 'var(--ink-3)' }} />
+      <div className={stepMetaClass}>
+        <span className="text-[var(--ink)]">03</span>
+        <span className={stepDotClass} />
         <span>Why this happens</span>
       </div>
 
-      <h1
-        style={{
-          fontFamily: 'var(--font-serif)',
-          fontWeight: 400,
-          fontSize: 'clamp(36px, 5.2vw, 60px)',
-          lineHeight: 1.05,
-          letterSpacing: '-0.015em',
-          margin: '0 0 24px',
-          textWrap: 'balance',
-        }}
-      >
-        Pull the lever. <em style={{ fontStyle: 'italic' }}>Watch the unfairness move.</em>
+      <h1 className={stepTitleClass}>
+        Pull the lever. <em className="italic">Watch the unfairness move.</em>
       </h1>
 
-      <p
-        style={{
-          fontFamily: 'var(--font-serif)',
-          fontSize: 'clamp(19px, 1.7vw, 22px)',
-          lineHeight: 1.55,
-          color: 'var(--ink-2)',
-          maxWidth: '36em',
-          margin: '0 0 36px',
-        }}
-      >
+      <p className={ledeClass}>
         That tiny 10% slice of luck did all the damage. Two things move when you
         drag the slider. Your personal win rate &mdash; and, more tellingly, the share
         of contests in which the most-skilled contestant of all wins at all.
       </p>
 
       {/* Payoff stat */}
-      <div style={{ margin: '24px 0' }}>
-        <div style={{ textAlign: 'center', padding: '36px 0 28px' }}>
+      <div className="my-5 sm:my-6">
+        <div className="py-8 text-center sm:pb-7 sm:pt-9">
           <div
+            className="font-serif text-[clamp(4.5rem,22vw,7.5rem)] font-normal leading-none tracking-normal text-[var(--ink)] transition-opacity sm:text-[clamp(6rem,14vw,10.5rem)]"
             style={{
-              fontFamily: 'var(--font-serif)',
-              fontSize: 'clamp(96px, 14vw, 168px)',
-              lineHeight: 1,
-              fontWeight: 400,
-              letterSpacing: '-0.04em',
               fontFeatureSettings: '"lnum", "tnum"',
-              color: 'var(--ink)',
-              transition: 'opacity 0.3s',
               opacity: isComputing ? 0.5 : 1,
             }}
           >
             {wr !== null ? wr : '\u2014'}
             <span
-              style={{
-                fontSize: '0.5em',
-                color: 'var(--ink-3)',
-                fontStyle: 'italic',
-                verticalAlign: '0.18em',
-                marginLeft: 2,
-                fontFeatureSettings: 'normal',
-              }}
+              className="ml-0.5 align-[0.18em] text-[0.5em] italic text-[var(--ink-3)]"
+              style={{ fontFeatureSettings: 'normal' }}
             >
               %
             </span>
           </div>
-          <div
-            style={{
-              fontFamily: 'var(--font-serif)',
-              fontStyle: 'italic',
-              fontSize: 22,
-              color: 'var(--ink-2)',
-              marginTop: 12,
-            }}
-          >
+          <div className="mt-3 font-serif text-[18px] italic leading-snug text-[var(--ink-2)] sm:text-[22px]">
             {isComputing
               ? 'computing\u2026'
               : wr !== null
               ? wrToSub(wr, luckWeightPct)
               : ''}
           </div>
-          <div
-            style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: 12,
-              letterSpacing: '0.06em',
-              color: 'var(--ink-3)',
-              marginTop: 18,
-              textTransform: 'uppercase',
-            }}
-          >
-            luck weight: <b style={{ color: 'var(--ink)', fontWeight: 500 }}>{luckWeightPct}%</b>
-            &nbsp;&middot;&nbsp;
-            <span style={{ color: 'var(--ink)' }}>
-              the most skilled wins anywhere:{' '}
-              <b style={{ fontWeight: 500 }}>{skillWr !== null ? `${skillWr}%` : '\u2014'}</b>
+          <div className="mx-auto mt-4 flex max-w-[42rem] flex-wrap justify-center gap-x-2 gap-y-1 font-mono text-[11px] uppercase tracking-normal text-[var(--ink-3)] sm:mt-[18px] sm:text-xs">
+            <span>
+              luck weight: <b className="font-medium text-[var(--ink)]">{luckWeightPct}%</b>
             </span>
-            &nbsp;&middot;&nbsp;
-            field size: <b style={{ color: 'var(--ink)', fontWeight: 500 }}>2,000</b>
+            <span aria-hidden="true">&middot;</span>
+            <span className="text-[var(--ink)]">
+              the most skilled wins anywhere:{' '}
+              <b className="font-medium">{skillWr !== null ? `${skillWr}%` : '\u2014'}</b>
+            </span>
+            <span aria-hidden="true">&middot;</span>
+            <span>
+              field size: <b className="font-medium text-[var(--ink)]">2,000</b>
+            </span>
           </div>
         </div>
 
         {/* Slider */}
-        <div style={{ margin: '36px auto 0', maxWidth: 640 }}>
-          <div
-            className="flex justify-between"
-            style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: 11,
-              letterSpacing: '0.12em',
-              textTransform: 'uppercase',
-              color: 'var(--ink-3)',
-              marginBottom: 14,
-            }}
-          >
-            <span style={{ color: 'var(--skill)' }}>Pure meritocracy</span>
-            <span style={{ color: 'var(--luck)' }}>Pure chaos</span>
+        <div className="mx-auto mt-8 max-w-[640px] sm:mt-9">
+          <div className="mb-3.5 flex justify-between gap-4 font-mono text-[10px] uppercase tracking-normal text-[var(--ink-3)] sm:text-[11px]">
+            <span className="text-[var(--skill)]">Pure meritocracy</span>
+            <span className="text-right text-[var(--luck)]">Pure chaos</span>
           </div>
-          <div style={{ position: 'relative', padding: '14px 0' }}>
+          <div className="relative py-3.5">
             <input
               type="range"
               min="0"
@@ -193,34 +137,18 @@ export default function NarrativeStep3() {
               }}
             />
           </div>
-          <div
-            className="flex justify-between items-baseline"
-            style={{
-              marginTop: 14,
-              fontFamily: 'var(--font-sans)',
-              fontSize: 13,
-              color: 'var(--ink-3)',
-            }}
-          >
+          <div className="mt-3.5 grid grid-cols-1 gap-1 font-sans text-xs text-[var(--ink-3)] sm:grid-cols-3 sm:text-[13px]">
             <span>Skill is everything</span>
-            <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--ink)', fontSize: 13 }}>
+            <span className="font-mono text-[13px] text-[var(--ink)] sm:text-center">
               luck weight = {luckWeightPct}%
             </span>
-            <span>Luck is everything</span>
+            <span className="sm:text-right">Luck is everything</span>
           </div>
         </div>
       </div>
 
       {/* Body */}
-      <p
-        style={{
-          fontSize: 19,
-          lineHeight: 1.6,
-          color: 'var(--ink-2)',
-          maxWidth: '36em',
-          margin: '36px 0 18px',
-        }}
-      >
+      <p className={`${bodyCopyClass} mt-8 sm:mt-9`}>
         Watch the second number. As luck&apos;s share grows from a sliver, the share
         of contests in which the most-skilled contestant wins at all collapses
         fast. The cruelty isn&apos;t that luck matters &mdash; it&apos;s that{' '}
@@ -228,79 +156,22 @@ export default function NarrativeStep3() {
         tightly packed, luck quietly does the choosing.
       </p>
 
-      <blockquote
-        style={{
-          fontFamily: 'var(--font-serif)',
-          fontStyle: 'italic',
-          fontSize: 22,
-          lineHeight: 1.45,
-          color: 'var(--ink)',
-          borderLeft: '2px solid var(--ink)',
-          padding: '4px 0 4px 20px',
-          margin: '28px 0',
-          maxWidth: '32em',
-        }}
-      >
+      <blockquote className={quoteClass}>
         The winners aren&apos;t the most skilled. They&apos;re the most skilled who also got lucky.
       </blockquote>
 
       {/* Escape final */}
-      <div
-        style={{
-          margin: '56px 0 0',
-          padding: '56px 28px',
-          textAlign: 'center',
-          background: 'var(--ink)',
-          color: 'var(--bg)',
-        }}
-      >
-        <h3
-          style={{
-            fontFamily: 'var(--font-serif)',
-            fontSize: 32,
-            fontWeight: 400,
-            letterSpacing: '-0.01em',
-            margin: '0 0 14px',
-          }}
-        >
+      <div className="mt-10 bg-[var(--ink)] px-5 py-9 text-center text-[var(--bg)] sm:mt-14 sm:px-7 sm:py-14">
+        <h3 className="mb-3.5 font-serif text-2xl font-normal leading-tight tracking-normal sm:text-[32px]">
           Now go play with it yourself.
         </h3>
-        <p
-          style={{
-            fontFamily: 'var(--font-serif)',
-            color: 'rgba(250,248,244,0.72)',
-            fontSize: 17,
-            margin: '0 auto 24px',
-            maxWidth: '36em',
-          }}
-        >
+        <p className="mx-auto mb-6 max-w-[36em] font-serif text-base leading-relaxed text-[rgba(250,248,244,0.72)] sm:text-[17px]">
           Adjust the field size. Push the luck weight to the extremes. See what
           breaks the model and what doesn&apos;t. The full simulation is one click away.
         </p>
         <Link
           href="/explore"
-          style={{
-            display: 'inline-block',
-            fontFamily: 'var(--font-sans)',
-            fontSize: 16,
-            fontWeight: 500,
-            background: 'transparent',
-            color: 'var(--bg)',
-            border: '1px solid var(--bg)',
-            padding: '16px 28px',
-            borderRadius: 4,
-            cursor: 'pointer',
-            textDecoration: 'none',
-            transition: 'background 0.15s, color 0.15s',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = 'var(--bg)'
-            e.currentTarget.style.color = 'var(--ink)'
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = 'transparent'
-            e.currentTarget.style.color = 'var(--bg)'
-          }}
+          className="inline-block rounded border border-[var(--bg)] px-5 py-3.5 font-sans text-sm font-medium text-[var(--bg)] no-underline transition-colors hover:bg-[var(--bg)] hover:text-[var(--ink)] sm:px-7 sm:py-4 sm:text-base"
         >
           Open free exploration &rarr;
         </Link>

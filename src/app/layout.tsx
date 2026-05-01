@@ -36,7 +36,9 @@ export default function RootLayout({
       lang="en"
       className={`${sourceSerif.variable} ${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col text-[17px] leading-[1.55] sm:text-[19px]">
+        {children}
+      </body>
     </html>
   );
 }

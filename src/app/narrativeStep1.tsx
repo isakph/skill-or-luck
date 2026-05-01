@@ -1,6 +1,15 @@
 'use client'
 
 import { useState } from 'react'
+import {
+  bodyCopyClass,
+  ledeClass,
+  monoCapsClass,
+  quoteClass,
+  stepDotClass,
+  stepMetaClass,
+  stepTitleClass,
+} from './narrativeStyles'
 
 export default function NarrativeStep1() {
   const [variation, setVariation] = useState<'cards' | 'curve'>('cards')
@@ -21,71 +30,28 @@ export default function NarrativeStep1() {
   return (
     <section>
       {/* Step meta */}
-      <div
-        className="flex items-center gap-3.5"
-        style={{
-          fontFamily: 'var(--font-mono)',
-          fontSize: 11,
-          letterSpacing: '0.12em',
-          textTransform: 'uppercase',
-          color: 'var(--ink-3)',
-          marginBottom: 28,
-        }}
-      >
-        <span style={{ color: 'var(--ink)' }}>01</span>
-        <span className="rounded-full" style={{ width: 4, height: 4, background: 'var(--ink-3)' }} />
+      <div className={stepMetaClass}>
+        <span className="text-[var(--ink)]">01</span>
+        <span className={stepDotClass} />
         <span>Meet the protagonist</span>
       </div>
 
       {/* Kicker */}
-      <h1
-        style={{
-          fontFamily: 'var(--font-serif)',
-          fontWeight: 400,
-          fontSize: 'clamp(36px, 5.2vw, 60px)',
-          lineHeight: 1.05,
-          letterSpacing: '-0.015em',
-          margin: '0 0 24px',
-          textWrap: 'balance',
-        }}
-      >
-        You are <em style={{ fontStyle: 'italic', color: 'var(--ink)' }}>extraordinarily</em> good at what you do.
+      <h1 className={stepTitleClass}>
+        You are <em className="italic text-[var(--ink)]">extraordinarily</em> good at what you do.
       </h1>
 
       {/* Lede */}
-      <p
-        style={{
-          fontFamily: 'var(--font-serif)',
-          fontSize: 'clamp(19px, 1.7vw, 22px)',
-          lineHeight: 1.55,
-          color: 'var(--ink-2)',
-          maxWidth: '36em',
-          margin: '0 0 36px',
-        }}
-      >
+      <p className={ledeClass}>
         You&apos;re a musician. Not a hobbyist &mdash; you&apos;re in the{' '}
-        <em
-          style={{
-            background: 'linear-gradient(180deg, transparent 62%, var(--luck-soft) 62%)',
-            fontStyle: 'normal',
-            padding: '0 2px',
-          }}
-        >
+        <em className="bg-[linear-gradient(180deg,transparent_62%,var(--luck-soft)_62%)] px-0.5 not-italic">
           top 0.02%
         </em>{' '}
         of skill in your subgenre. You&apos;ve put in the hours. The talent was there to begin with.
       </p>
 
       {/* Body */}
-      <p
-        style={{
-          fontSize: 19,
-          lineHeight: 1.6,
-          color: 'var(--ink-2)',
-          maxWidth: '36em',
-          margin: '0 0 18px',
-        }}
-      >
+      <p className={bodyCopyClass}>
         This year, a label is watching your scene. They&apos;ll sign exactly one artist:
         whoever ends the year on top. Two thousand musicians are in the running.
         And luck, of course, plays its part &mdash; the right Spotify listener at the
@@ -95,28 +61,12 @@ export default function NarrativeStep1() {
       </p>
 
       {/* Variation switcher */}
-      <div style={{ margin: '18px 0 8px' }}>
-        <span
-          style={{
-            fontFamily: 'var(--font-mono)',
-            fontSize: 10,
-            letterSpacing: '0.12em',
-            textTransform: 'uppercase',
-            color: 'var(--ink-3)',
-            marginRight: 12,
-          }}
-        >
+      <div className="my-5 flex flex-wrap items-center gap-2">
+        <span className={monoCapsClass}>
           View as
         </span>
         <div
-          className="inline-flex"
-          style={{
-            border: '1px solid var(--rule)',
-            borderRadius: 999,
-            padding: 3,
-            gap: 0,
-            fontFamily: 'var(--font-sans)',
-          }}
+          className="inline-flex rounded-full border border-[var(--rule)] p-0.5 font-sans"
           role="tablist"
           aria-label="Step 1 visual variation"
         >
@@ -124,17 +74,11 @@ export default function NarrativeStep1() {
             <button
               key={v}
               onClick={() => setVariation(v)}
-              style={{
-                background: variation === v ? 'var(--ink)' : 'transparent',
-                color: variation === v ? 'var(--bg)' : 'var(--ink-3)',
-                border: 0,
-                padding: '6px 14px',
-                fontSize: 12,
-                borderRadius: 999,
-                cursor: 'pointer',
-                fontFamily: 'inherit',
-                letterSpacing: '0.02em',
-              }}
+              className={`cursor-pointer rounded-full px-3.5 py-1.5 text-xs tracking-normal transition-colors ${
+                variation === v
+                  ? 'bg-[var(--ink)] text-[var(--bg)]'
+                  : 'text-[var(--ink-3)] hover:text-[var(--ink)]'
+              }`}
             >
               {v === 'cards' ? 'Stat card' : 'On the curve'}
             </button>
@@ -145,15 +89,7 @@ export default function NarrativeStep1() {
       {/* Variation A: Stat cards */}
       {variation === 'cards' && (
         <div
-          className="grid narrative-grid-3"
-          style={{
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: 1,
-            background: 'var(--rule)',
-            borderTop: '1px solid var(--rule)',
-            borderBottom: '1px solid var(--rule)',
-            margin: '36px 0',
-          }}
+          className="my-8 grid grid-cols-3 gap-px border-y border-[var(--rule)] bg-[var(--rule)] sm:my-9"
         >
           {[
             { label: 'Ability', value: '99', color: 'var(--skill)', foot: 'out of 100 — innate talent' },
@@ -162,35 +98,21 @@ export default function NarrativeStep1() {
           ].map((stat) => (
             <div
               key={stat.label}
-              className="flex flex-col gap-2"
-              style={{ background: 'var(--bg)', padding: '28px 24px 24px' }}
+              className="flex min-w-0 flex-col gap-1.5 bg-[var(--bg)] px-2 py-4 sm:gap-2 sm:px-6 sm:pb-6 sm:pt-7"
             >
-              <span
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: 10,
-                  letterSpacing: '0.14em',
-                  textTransform: 'uppercase',
-                  color: 'var(--ink-3)',
-                }}
-              >
+              <span className={monoCapsClass}>
                 {stat.label}
               </span>
               <span
-                className="narrative-stat-num"
+                className="font-serif text-[clamp(2rem,11vw,2.75rem)] font-normal leading-none tracking-normal sm:text-[64px]"
                 style={{
-                  fontFamily: 'var(--font-serif)',
-                  fontSize: 64,
-                  lineHeight: 1,
-                  fontWeight: 400,
-                  letterSpacing: '-0.02em',
                   fontFeatureSettings: '"lnum", "tnum"',
                   color: stat.color,
                 }}
               >
                 {stat.value}
               </span>
-              <span className="narrative-stat-foot" style={{ fontFamily: 'var(--font-sans)', fontSize: 12, color: 'var(--ink-3)', marginTop: 4 }}>
+              <span className="break-words font-sans text-[10px] leading-snug text-[var(--ink-3)] sm:mt-1 sm:text-xs">
                 {stat.foot}
               </span>
             </div>
@@ -200,31 +122,15 @@ export default function NarrativeStep1() {
 
       {/* Variation B: Distribution curve */}
       {variation === 'curve' && (
-        <div
-          style={{
-            background: 'var(--bg)',
-            border: '1px solid var(--rule)',
-            padding: '28px 28px 20px',
-            margin: '36px 0',
-          }}
-        >
-          <p
-            style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: 10,
-              letterSpacing: '0.14em',
-              textTransform: 'uppercase',
-              color: 'var(--ink-3)',
-              margin: '0 0 16px',
-            }}
-          >
+        <div className="my-8 border border-[var(--rule)] bg-[var(--bg)] p-4 pb-3 sm:my-9 sm:p-7 sm:pb-5">
+          <p className={`${monoCapsClass} mb-4`}>
             Where you sit on the skill distribution
           </p>
           <svg
             viewBox="0 0 600 180"
             preserveAspectRatio="none"
             aria-hidden="true"
-            style={{ width: '100%', height: 180, display: 'block' }}
+            className="block h-36 w-full sm:h-[180px]"
           >
             <line x1="0" y1="160" x2="600" y2="160" stroke="var(--rule)" strokeWidth="1" />
             <path d={areaPath} fill="#e8e1d1" stroke="none" />
@@ -256,10 +162,7 @@ export default function NarrativeStep1() {
               avg 50
             </text>
           </svg>
-          <div
-            className="flex justify-between"
-            style={{ fontFamily: 'var(--font-sans)', fontSize: 12, color: 'var(--ink-3)', marginTop: 8 }}
-          >
+          <div className="mt-2 flex justify-between font-sans text-xs text-[var(--ink-3)]">
             <span>Skill score 0</span>
             <span>50</span>
             <span>100</span>
@@ -268,34 +171,14 @@ export default function NarrativeStep1() {
       )}
 
       {/* Body continued */}
-      <p
-        style={{
-          fontSize: 19,
-          lineHeight: 1.6,
-          color: 'var(--ink-2)',
-          maxWidth: '36em',
-          margin: '28px 0 18px',
-        }}
-      >
+      <p className={`${bodyCopyClass} mt-7`}>
         The label awards the deal to whoever ends the year on top.
         Performance, in this world, is mostly skill &mdash; but a little luck slips in too:
         a viral clip, a chance introduction, a rival&apos;s bad week. About <b>10%</b> of it.
       </p>
 
       {/* Pull quote */}
-      <blockquote
-        style={{
-          fontFamily: 'var(--font-serif)',
-          fontStyle: 'italic',
-          fontSize: 22,
-          lineHeight: 1.45,
-          color: 'var(--ink)',
-          borderLeft: '2px solid var(--ink)',
-          padding: '4px 0 4px 20px',
-          margin: '28px 0',
-          maxWidth: '32em',
-        }}
-      >
+      <blockquote className={quoteClass}>
         Ninety percent skill. Ten percent luck. You&apos;re in the top half-percent of skill,
         and slightly above average on luck. Surely the deal is yours.
       </blockquote>
